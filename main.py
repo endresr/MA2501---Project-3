@@ -26,7 +26,7 @@ gint=(1/13)*(2+3*np.exp((3*np.pi)/4)) #Value of definite integral of g
 
 #Plot
 
-fig=plt.figure(1,figsize=(16,4),dpi=300,facecolor='xkcd:pale',
+fig=plt.figure(1,figsize=(16,9),dpi=300,facecolor='xkcd:pale',
                edgecolor='none')
 ax=fig.add_subplot(111)
 ax.set_axis_bgcolor('xkcd:pale grey')
