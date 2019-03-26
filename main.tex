@@ -25,6 +25,7 @@
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usetikzlibrary{patterns}
+\usetikzlibrary{positioning}
 \usepackage{lettrine}
 \title{Project 3 - MA2501}
 \author{Anna Bakkebø\And Thomas Schjem \And Endre Sørmo Rundsveen}
@@ -88,29 +89,34 @@
     {\noindent\large \color{Brown}{Anna Bakkebø\\Thomas Schjem\\Endre Sørmo Rundsveen}}\\
     \raggedright
     \hfill \break
-    \lettrine[lraise=0.15]{T}{} he following document are my solution to the second assignment of MA2501 in the spring semester of 2019. Throughout one can assume that the packages \textit{sympy, numpy,} and \textit{matplotlib}, are imported as follows
-    \begin{lstlisting}[language=Python]
-    import matplotlib
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import sumpy as symp\end{lstlisting}
+    \lettrine[lraise=0.15]{T}{} his document is the report for our third project in Numerical Methods - MA2501 the spring semester of 2019. The project mainly focuses on numerical integrations techniques and are based on the Newton-Cotes quadrature formula. First we familiarize ourself with the adaptive simpson method, before we continue with the Romber method, and lastly we end by exploring both the Runge-Kutta implicit integration method and the improved Euler method. 
+    % \begin{lstlisting}[language=Python]
+    % import matplotlib
+    % import matplotlib.pyplot as plt
+    % import numpy as np
+    % import sumpy as symp\end{lstlisting}
 \end{titlepage}
 \restoregeometry
 \twocolumn
 
 \section*{Problem 1}
+\subsection*{a)}
+The composite Simpson method is a method which takes the interval given and 
 \subsection*{c)}
 \newpage
 gbbr
 \newpage
 \thispagestyle{noheader}
 \onecolumn
-\newgeometry{margin=20mm, tmargin=100mm,headheight=15pt}
+\newgeometry{margin=20mm, tmargin=0.61\paperwidth,headheight=15pt}
+\refstepcounter{figure}
+\label{fig:graph}
 \begin{tikzpicture}[remember picture,overlay]
     \fill[color=XKCDpale] ($(current page.north west)-(0,{0.6\paperwidth})$) rectangle (current page.north east);
-    \node[image=pltAdpSimp.png] at ($(current page.north west)-(0.1\pagewidth,1cm)$) 
+    \node (graph) at ($(current page.north)-(0,0.3\paperwidth)$) {\includegraphics[width=0.9\paperwidth]{pltAdpSimp.png}};
+    \node[below= 0.15cm  of graph] {Figure \arabic{figure}: The errors of the adaptive Simpson Rule with decreasing tolerance, for different functions.};
 \end{tikzpicture}
-teriporebbbbbbbbbbbbbbbbbbbbbbbbbæireav+irhgaeri
+
 \restoregeometry
 
 \end{document}
