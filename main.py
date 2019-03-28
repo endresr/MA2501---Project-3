@@ -26,10 +26,10 @@ gint=(1/13)*(2+3*np.exp((3*np.pi)/4)) #Value of definite integral of g
 
 #Plot
 
-fig=plt.figure(1,figsize=(16,9),dpi=300,facecolor='xkcd:pale',
+fig=plt.figure(1,figsize=(16,9),dpi=100,facecolor='xkcd:pale',
                edgecolor='none')
 ax=fig.add_subplot(111)
-ax.set_axis_bgcolor('xkcd:pale grey')
+ax.set_facecolor('xkcd:pale grey')
 plt.xlim(TolRangea[0],TolRangea[-1])
 plt.loglog(TolRangea,np.absolute(0-FSim),'xkcd:crimson',
            label=r'$f(x)=\cos(2\pi x),$ $x\in[0,1]$')
@@ -47,6 +47,7 @@ c) Is implemented in IntegrationMethods.py as rombergIntegration
 d) The test function for the Romberg integration is ran in Tests.py
     The rest of the task follows.
 """
+#Comparing values from adaptive Simpson and Romberg
 #Variables and function
 h=lambda x:x**(1/3)
 #Integrals
@@ -64,3 +65,8 @@ print("{:<20}{:>15}{:>15}".format("Adaptive Simpson",str(round(FaS,6)),
       str(round(HaS,6))))
 print("{:<20}{:>15}{:>15}".format("Romberg Integration",str(round(Fr,6)),
       str(round(Hr,6))))
+
+"""
+Task 2
+
+"""

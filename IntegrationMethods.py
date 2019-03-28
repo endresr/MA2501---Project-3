@@ -4,6 +4,7 @@ This module contains the implementation of several methods of numerical
 integration
 """
 import numpy as np
+import sympy as sp
 
 """
 The following 2 functions,
@@ -94,3 +95,104 @@ def rombergIntegration(f,interval,m,TOL):
             if np.abs(errCor(n,n-1))<TOL:
                 return RombMatr[n][n-1]
     return RombMatr[-1][-1]
+
+"""
+Implicit Midpoint Runge-Kutta 
+"""
+
+def Newt(func,Jac,x0,NIter=100,TOL=1e-7):
+    """
+    Newton method for finding the implicit functions in impMidRungKut
+    Note that as its associated function, this function is hardcoded for
+        three variables as well.
+    Input:
+        func: function which fixed is to be found for
+        Jac: the jacobian of the function
+        x0: Starting point
+        NIter: Maximum iterations
+        TOL: Tolerance for the answer
+    Output:
+        The fixed-point
+    """
+    i=0
+    x1=x0
+    while i<N:
+        x2=-invJ(x1[0],x1[1],x1[2]).dot(func(x1[0],x1[1],x1[0]))
+        Fx01=Fx(x2[0],x2[1],x2[2])
+        if np.linalg.norm(Fx01)<Tol or np.linalg.norm(x2-x1)<Tol:
+            return x2
+        x1=x2
+        i+=1
+    return xresult
+
+def impMidRungKut(Interval,InitVal,F,Step):
+    """
+    This is the code for the implicit Midpoint Runge-Kutta method.
+    Note that this is hardcoded for three variables, and uses Newton method
+        to estimate the vectorfunctions. 
+    Input:
+        Interval: [t0,t] where a is start-time, and t is where the function
+            shall be evaluated.
+        InitVal: Value of function at time t0
+        F: sympy expression for the derivative dependent on time and value 
+            of function
+        Step: Step-size of the method
+    Output:
+        The function at time t
+    """
+    #Initializing information for the Newton method later on
+    J=F.jacobian([x1,x2,x3])
+    invJ=symp.lambdify((x1,x2,x3),J.inv(),"numpy")
+    Fx=symp.lambdify((x1,x2,x3),F.T,"numpy")
+    yn=InitVal
+    t=t0
+    
+    while t<Interval[1]:
+        
+        
+        t+=h
+        
+
+"""Per 28.03.18 18:40 kan det se ut som det er oppgitt formelen for modified
+Euler der det står at vi skal implementere improved Euler. Har dermed begge 
+i det følgende. Ref. Süli og Mayers (s. 328)"""
+def modiEul(Interval,InitVal,F,Step):
+    """
+    This is the modified Euler method.
+    Input:
+        Interval: [t0,t] where a is start-time, and t is where the function
+            shall be evaluated.
+        InitVal: Value of function at time t0
+        F: formula for the derivative dependent on time and value of function
+        Step: Step-size of the method
+    Output:
+        The function at time t
+    """
+    tn=Interval[0]
+    yn=InitVal
+    while tn<Interval[1]:
+        ynhalf=yn+.5*h*F(tn,yn)
+        yn+=h*F(tn+.5*h,ynhalf)
+        tn+=h
+    return yn
+
+def imprEul(Interval,InitVal,F,Step):
+    """
+    This is the improved Euler method.
+    Input:
+        Interval: [t0,t] where a is start-time, and t is where the function
+            shall be evaluated.
+        InitVal: Value of function at time t0
+        F: formula for the derivative dependent on time and value of function
+        Step: Step-size of the method
+    Output:
+        The function at time t
+    """
+    tn=Interval[0]
+    yn=InitVal
+    while tn<Interval[1]:
+        fn=F(tn,yn)
+        fn2=F(tn+h,yn+h*fn)
+        yn+=.5*h*(fn+fn2)
+        tn+=h
+    return yn
