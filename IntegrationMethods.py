@@ -99,10 +99,10 @@ def rombergIntegration(f, interval, m, TOL):
 Implicit Midpoint Runge-Kutta 
 """
 
-def Newt(func, invJac, x0, t, NIter=100, TOL=1e-7):
+def Newt(func, Jac, x0, t, NIter=100, TOL=1e-7):
     """
     Newton method for finding the implicit functions in impMidRungKut
-    Note that as its associated function, this function is hardcoded for
+    Note that as its mother function, this function is hardcoded for
         three variables as well.
     Input:
         func: function which fixed is to be found for
@@ -117,15 +117,16 @@ def Newt(func, invJac, x0, t, NIter=100, TOL=1e-7):
     i = 0
     x1 = x0
     while i < NIter:
-        x2 = x1-invJac(t, x1[0], x1[1], x1[2]).dot(func(t, x1[0], x1[1], x1[0]))
-        Fx01 = func(t, x2[0], x2[1], x2[2])
+        xalm=np.linalg.solve(Jac(t,x1),-func(t,x1))
+        x2 = xalm+x1
+        Fx01 = func(t, x2)
         if np.linalg.norm(Fx01) < TOL or np.linalg.norm(x2-x1) < TOL:
             return x2
         x1 = x2
         i += 1
     return x2
 
-def impMidRungKut(Interval, InitVal, F, Step, invJac):
+def impMidRungKut(Interval, InitVal, F, Step, Jac):
     """
     This is the code for the implicit Midpoint Runge-Kutta method.
     Note that this is hardcoded for three variables, and uses Newton method
@@ -137,7 +138,7 @@ def impMidRungKut(Interval, InitVal, F, Step, invJac):
         F: function for the derivative dependent on time and value 
             of function in question
         Step: Step-size of the method
-        Jac: One has to provide the inverse jacobian for the expression of the 
+        Jac: One has to provide the jacobian for the expression of the 
             derivative
     Output:
         The function at time t
@@ -146,7 +147,7 @@ def impMidRungKut(Interval, InitVal, F, Step, invJac):
     yn = [InitVal]
     t = Interval[0]
     while t < Interval[1]:
-        K1 = Newt(F, invJac, yn[-1], t)
+        K1 = Newt(F, Jac, yn[-1], t)
         yn.append(yn[-1]+Step*K1)
         t += Step
     return yn

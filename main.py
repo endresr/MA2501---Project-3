@@ -83,15 +83,24 @@ to find the inverse jacobian. Surely we could have made the function more
 general, but for little gain.
 """
 
-l1,l2,l3=(1,2,3)#Tensor values
+L=(1,2,3)#Tensor values
 t0=0#Start-time
 tn=1#end-time
-tid,x1,x2,x3=sp.symbols('tid,x1,x2,x3') 
-m=sp.Matrix([[x1],
-             [x2],
-             [x3]])
-L=sp.Matrix([[l1,0,0],
-             [0,l2,0],
-             [0,0,l3]])
-funk=m.cross(L*m)
-funkAlt=sp.lambdify((tid,x1,x2,x3),funk,'numpy')
+h=1e-5
+m0=np.array([[1],
+             [1],
+             [1]])
+def funk(t,m):
+    T=np.diag(L)
+    return np.cross(m, T @ m,axis=0)
+
+def Jac(t, m):
+    x1, x2, x3 = m
+    l1,l2,l3 = L
+    J = np.array([[0,x3*(l3-l2),x2*(l3-l2)],
+                      [x3*(l1-l3),0,x1*(l1-l3)],
+                      [x2*(l2-l1),x1*(l2-l1),0]])
+    return J
+
+Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
+print(Jalla)
