@@ -126,7 +126,7 @@ def Newt(func,Jac,x0,t,NIter=100,TOL=1e-7):
         i+=1
     return x2
 
-def impMidRungKut(Interval,InitVal,F,Step):
+def impMidRungKut(Interval,InitVal,F,Step,invJac):
     """
     This is the code for the implicit Midpoint Runge-Kutta method.
     Note that this is hardcoded for three variables, and uses Newton method
@@ -135,20 +135,20 @@ def impMidRungKut(Interval,InitVal,F,Step):
         Interval: [t0,t] where a is start-time, and t is where the function
             shall be evaluated.
         InitVal: Value of function at time t0
-        F: sympy expression for the derivative dependent on time and value 
-            of function
+        F: function for the derivative dependent on time and value 
+            of function in question
         Step: Step-size of the method
+        Jac: One has to provide the inverse jacobian for the expression of the 
+            derivative
     Output:
         The function at time t
     """
     #Initializing information for the Newton method later on
-    J=F.jacobian([x1,x2,x3])
-    invJ=sp.lambdify((x1,x2,x3),J.inv(),"numpy")
-    Fx=sp.lambdify((tid,x1,x2,x3),F.T,"numpy")
+    
     yn=[InitVal]
     t=t0
     while t<Interval[1]:
-        K1=Newt(Fx,invJ,yn[-1],t)
+        K1=Newt(Fx,invJac,yn[-1],t)
         yn.append(yn[-1]+step*k1)
         t+=h
     return yn
