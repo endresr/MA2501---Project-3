@@ -13,6 +13,7 @@ The following 2 functions,
 are in conjunction with task 1 a) in the project.
 """
 
+
 def Simpson(f,interval):
     """
     This is the Simpson rule
