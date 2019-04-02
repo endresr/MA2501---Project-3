@@ -4,7 +4,7 @@ This module contains the implementation of several methods of numerical
 integration
 """
 import numpy as np
-import sympy as sp
+
 
 """
 The following 2 functions,
@@ -100,7 +100,7 @@ def rombergIntegration(f,interval,m,TOL):
 Implicit Midpoint Runge-Kutta 
 """
 
-def Newt(func,Jac,x0,t,NIter=100,TOL=1e-7):
+def Newt(func,invJac,x0,t,NIter=100,TOL=1e-7):
     """
     Newton method for finding the implicit functions in impMidRungKut
     Note that as its associated function, this function is hardcoded for
@@ -117,10 +117,10 @@ def Newt(func,Jac,x0,t,NIter=100,TOL=1e-7):
     """
     i=0
     x1=x0
-    while i<N:
-        x2=x1-invJ(x1[0],x1[1],x1[2]).dot(func(t,x1[0],x1[1],x1[0]))
-        Fx01=Fx(t,x2[0],x2[1],x2[2])
-        if np.linalg.norm(Fx01)<Tol or np.linalg.norm(x2-x1)<Tol:
+    while i<NIter:
+        x2=x1-invJac(t,x1[0],x1[1],x1[2]).dot(func(t,x1[0],x1[1],x1[0]))
+        Fx01=func(t,x2[0],x2[1],x2[2])
+        if np.linalg.norm(Fx01)<TOL or np.linalg.norm(x2-x1)<TOL:
             return x2
         x1=x2
         i+=1
@@ -143,14 +143,13 @@ def impMidRungKut(Interval,InitVal,F,Step,invJac):
     Output:
         The function at time t
     """
-    #Initializing information for the Newton method later on
     
     yn=[InitVal]
-    t=t0
+    t=Interval[0]
     while t<Interval[1]:
-        K1=Newt(Fx,invJac,yn[-1],t)
-        yn.append(yn[-1]+step*k1)
-        t+=h
+        K1=Newt(F,invJac,yn[-1],t)
+        yn.append(yn[-1]+Step*K1)
+        t+=Step
     return yn
 
 """Per 28.03.18 18:40 kan det se ut som det er oppgitt formelen for modified

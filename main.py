@@ -78,9 +78,9 @@ modiEul, respectively.
 
 
 c),d) and e) are given in the following.
-In an effort to make the code more general, it was decided to use sympy for 
-the Newton method. How well this works can surely be debated, but it stands
-for the time being.
+The code is hardcoded for three variable vectorfunctions and needs the user
+to find the inverse jacobian. Surely we could have made the function more 
+general, but for little gain.
 """
 
 l1,l2,l3=(1,2,3)#Tensor values
