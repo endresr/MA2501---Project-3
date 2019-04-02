@@ -172,9 +172,9 @@ def modiEul(Interval,InitVal,F,Step):
     tn=Interval[0]
     yn=InitVal
     while tn<Interval[1]:
-        ynhalf=yn+.5*h*F(tn,yn)
-        yn+=h*F(tn+.5*h,ynhalf)
-        tn+=h
+        ynhalf=yn+.5*Step*F(tn,yn)
+        yn+=Step*F(tn+.5*Step,ynhalf)
+        tn+=Step
     return yn
 
 def imprEul(Interval,InitVal,F,Step):
@@ -193,7 +193,7 @@ def imprEul(Interval,InitVal,F,Step):
     yn=InitVal
     while tn<Interval[1]:
         fn=F(tn,yn)
-        fn2=F(tn+h,yn+h*fn)
-        yn+=.5*h*(fn+fn2)
-        tn+=h
+        fn2=F(tn+Step,yn+Step*fn)
+        yn+=.5*Step*(fn+fn2)
+        tn+=Step
     return yn
