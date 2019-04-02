@@ -4,8 +4,7 @@ This is the main module for project 3 in MA2501
 Authors: Anne Bakkebø, Thomas Schjem and Endre Rundsveen
 """
 import numpy as np
-import sympy as sp
-#from scipy.integrate import solve_ivp
+import scipy.integrate as spi
 import matplotlib.pyplot as plt
 import IntegrationMethods as IntM #The module containing our functions
 
@@ -86,7 +85,7 @@ general, but for little gain.
 L=(1,2,3)#Tensor values
 t0=0#Start-time
 tn=1#end-time
-h=1e-5
+h=1e-4
 m0=np.array([[1],
              [1],
              [1]])
@@ -103,4 +102,6 @@ def Jac(t, m):
     return J
 
 Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
-print(Jalla)
+print(Jalla[-1])
+Jalla2=spi.solve_ivp(funk,(t0,tn),m0)
+print(Jalla2)
