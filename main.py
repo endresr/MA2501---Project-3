@@ -103,5 +103,5 @@ def Jac(t, m):
 
 Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
 print(Jalla[-1])
-Jalla2=spi.solve_ivp(funk,(t0,tn),m0)
-print(Jalla2)
+Jalla2=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0])
+print(Jalla2[-1])
