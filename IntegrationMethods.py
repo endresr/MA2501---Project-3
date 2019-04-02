@@ -78,29 +78,29 @@ def rombergIntegration(f,interval,m,TOL):
     a,b=interval
     hn=(b-a)
     RombMatr=np.zeros((m,m))
-    RombMatr[0][0]=(1/2)*hn*(f(a)+f(b))
+    RombMatr[0,0]=(1/2)*hn*(f(a)+f(b))
     #Needed function
     def errCor(n,k):
-        return (1/(4**(k)-1))*(RombMatr[n][k-1]-RombMatr[n-1,k-1])
+        return (1/(4**(k)-1))*(RombMatr[n,k-1]-RombMatr[n-1,k-1])
     #Main
     for n in range(1,m):
         addition=0
         hn=hn*1/2
         for i in range(2**(n-1)):
             addition+=f(a+(2*i+1)*hn)
-        RombMatr[n][0]=(1/2)*RombMatr[n-1][0]+hn*addition
+        RombMatr[n][0]=(1/2)*RombMatr[n-1,0]+hn*addition
         for k in range(1,n):
-            RombMatr[n][k]=RombMatr[n][k-1]+errCor(n,k)
+            RombMatr[n][k]=RombMatr[n,k-1]+errCor(n,k)
         if n !=1: #Else the code will divide by zero
             if np.abs(errCor(n,n-1))<TOL:
-                return RombMatr[n][n-1]
-    return RombMatr[-1][-1]
+                return RombMatr[n,n-1]
+    return RombMatr[-1,-1]
 
 """
 Implicit Midpoint Runge-Kutta 
 """
 
-def Newt(func,Jac,x0,NIter=100,TOL=1e-7):
+def Newt(func,Jac,x0,t,NIter=100,TOL=1e-7):
     """
     Newton method for finding the implicit functions in impMidRungKut
     Note that as its associated function, this function is hardcoded for
@@ -109,6 +109,7 @@ def Newt(func,Jac,x0,NIter=100,TOL=1e-7):
         func: function which fixed is to be found for
         Jac: the jacobian of the function
         x0: Starting point
+        t: the time which the functions fixed point is to be found
         NIter: Maximum iterations
         TOL: Tolerance for the answer
     Output:
@@ -117,13 +118,13 @@ def Newt(func,Jac,x0,NIter=100,TOL=1e-7):
     i=0
     x1=x0
     while i<N:
-        x2=-invJ(x1[0],x1[1],x1[2]).dot(func(x1[0],x1[1],x1[0]))
-        Fx01=Fx(x2[0],x2[1],x2[2])
+        x2=x1-invJ(x1[0],x1[1],x1[2]).dot(func(t,x1[0],x1[1],x1[0]))
+        Fx01=Fx(t,x2[0],x2[1],x2[2])
         if np.linalg.norm(Fx01)<Tol or np.linalg.norm(x2-x1)<Tol:
             return x2
         x1=x2
         i+=1
-    return xresult
+    return x2
 
 def impMidRungKut(Interval,InitVal,F,Step):
     """
@@ -142,20 +143,20 @@ def impMidRungKut(Interval,InitVal,F,Step):
     """
     #Initializing information for the Newton method later on
     J=F.jacobian([x1,x2,x3])
-    invJ=symp.lambdify((x1,x2,x3),J.inv(),"numpy")
-    Fx=symp.lambdify((x1,x2,x3),F.T,"numpy")
-    yn=InitVal
+    invJ=sp.lambdify((x1,x2,x3),J.inv(),"numpy")
+    Fx=sp.lambdify((tid,x1,x2,x3),F.T,"numpy")
+    yn=[InitVal]
     t=t0
-    
     while t<Interval[1]:
-        
-        
+        K1=Newt(Fx,invJ,yn[-1],t)
+        yn.append(yn[-1]+step*k1)
         t+=h
-        
+    return yn
 
 """Per 28.03.18 18:40 kan det se ut som det er oppgitt formelen for modified
 Euler der det står at vi skal implementere improved Euler. Har dermed begge 
 i det følgende. Ref. Süli og Mayers (s. 328)"""
+
 def modiEul(Interval,InitVal,F,Step):
     """
     This is the modified Euler method.

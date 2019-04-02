@@ -4,6 +4,8 @@ This module contains the testfunctions for the project
 """
 import numpy as np
 import IntegrationMethods as IntM
+
+
 def test_adaptiveSimpson():
     f=lambda x: np.cos(2*np.pi*x)
     g=lambda x: np.exp(3*x)*np.sin(2*x)
@@ -26,3 +28,4 @@ def test_rombergIntegration():
     
 
 test_rombergIntegration()
+

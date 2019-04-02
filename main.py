@@ -4,6 +4,8 @@ This is the main module for project 3 in MA2501
 Authors: Anne Bakkebø, Thomas Schjem and Endre Rundsveen
 """
 import numpy as np
+import sympy as sp
+#from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
 import IntegrationMethods as IntM #The module containing our functions
 
@@ -68,5 +70,28 @@ print("{:<20}{:>15}{:>15}".format("Romberg Integration",str(round(Fr,6)),
 
 """
 Task 2
+a) and b) is implemented in IntegrationMethods.py. The midpoint is implemented
+as impMidRungKut. As at the time of writing code, the formula for improved 
+Euler method in the project text looks more like the formula for modified 
+Euler method, both are implemented. They are found under the names imprEul and
+modiEul, respectively. 
 
+
+c),d) and e) are given in the following.
+In an effort to make the code more general, it was decided to use sympy for 
+the Newton method. How well this works can surely be debated, but it stands
+for the time being.
 """
+
+l1,l2,l3=(1,2,3)#Tensor values
+t0=0#Start-time
+tn=1#end-time
+tid,x1,x2,x3=sp.symbols('tid,x1,x2,x3') 
+m=sp.Matrix([[x1],
+             [x2],
+             [x3]])
+L=sp.Matrix([[l1,0,0],
+             [0,l2,0],
+             [0,0,l3]])
+funk=m.cross(L*m)
+funkAlt=sp.lambdify((tid,x1,x2,x3),funk,'numpy')
