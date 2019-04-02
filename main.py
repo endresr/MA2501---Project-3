@@ -17,13 +17,13 @@ b) The test function for the adaptive Simpson Quadrature is ran in Tests.py
 """
 #Variables and function
 NumbPointa=100
-TolRangea=np.linspace(10,1e-10,NumbPointa)
-f=lambda x: np.cos(2*np.pi*x)
-g=lambda x:np.exp(3*x)*np.sin(2*x)
+TolRangea = np.linspace(10,1e-10,NumbPointa)
+f = lambda x: np.cos(2*np.pi*x)
+g = lambda x: np.exp(3*x)*np.sin(2*x)
 
-FSim=np.asarray([IntM.adaptiveSimpson(f,(0,1),i) for i in TolRangea])
-GSim=np.asarray([IntM.adaptiveSimpson(g,(0,np.pi/4),i) for i in TolRangea])
-gint=(1/13)*(2+3*np.exp((3*np.pi)/4)) #Value of definite integral of g
+FSim = np.asarray([IntM.adaptiveSimpson(f,(0,1),i) for i in TolRangea])
+GSim = np.asarray([IntM.adaptiveSimpson(g,(0,np.pi/4),i) for i in TolRangea])
+gint = (1/13)*(2+3*np.exp((3*np.pi)/4)) #Value of definite integral of g
 
 #Plot
 
@@ -101,7 +101,9 @@ def Jac(t, m):
                       [x2*(l2-l1),x1*(l2-l1),0]])
     return J
 
+
 Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
 print(Jalla[-1])
-Jalla2=spi.solve_ivp(funk,(t0,tn),m0)
+
+Jalla2=spi.solve_ivp(funk,(t0,tn),np.array([1,1,1]))
 print(Jalla2)
