@@ -9,7 +9,7 @@ import IntegrationMethods as IntM
 def test_adaptiveSimpson():
     f=lambda x: np.cos(2*np.pi*x)
     g=lambda x: np.exp(3*x)*np.sin(2*x)
-    gval=(1./13)*(2.+3.*np.exp((3*np.pi)/4))
+    gval=(1/13)*(2+3*np.exp((3*np.pi)/4))
     print(gval)
     print(IntM.adaptiveSimpson(g,(0,np.pi/4),1e-7))
     assert np.abs(0-IntM.adaptiveSimpson(f,(0,1),1e-7))<1e-7, \

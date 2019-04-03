@@ -117,8 +117,10 @@ def Newt(func, Jac, x0, t, NIter=100, TOL=1e-7):
     i = 0
     x1 = x0
     while i < NIter:
-        xalm=np.linalg.solve(Jac(t,x1),-func(t,x1))
-        x2 = xalm+x1
+        #print(Jac(t,x1))
+        #print(func(t,x1))
+        xalm=np.linalg.solve(Jac(t,x1),func(t,x1))
+        x2 = x1-xalm
         Fx01 = func(t, x2)
         if np.linalg.norm(Fx01) < TOL or np.linalg.norm(x2-x1) < TOL:
             return x2

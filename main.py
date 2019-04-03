@@ -6,9 +6,9 @@ Authors: Anne Bakkebø, Thomas Schjem and Endre Rundsveen
 import numpy as np
 import scipy.integrate as spi
 import matplotlib.pyplot as plt
-import IntegrationMethods as IntM #The module containing our functions
+import IntegrationMethods as IntM  #The module containing our functions
 
-from Tests import * #The tests are ran
+from Tests import *  #The tests are ran
 """
 Task 1 
 a) Is implemented in IntegrationMethods.py as adaptiveSimpson()
@@ -91,10 +91,12 @@ m0=np.array([[1],
              [1]])
 def funk(t,m):
     T=np.diag(L)
-    return np.cross(m, T @ m,axis=0)
+    return np.cross(m, T @ m,axis=0)#.reshape(1,3)[0]
 
 def Jac(t, m):
-    x1, x2, x3 = m
+    x1, x2, x3 = m[0,0],m[1,0],m[2,0]
+    #print(m)
+    #print(x1, x2, x3)
     l1,l2,l3 = L
     J = np.array([[0,x3*(l3-l2),x2*(l3-l2)],
                       [x3*(l1-l3),0,x1*(l1-l3)],
