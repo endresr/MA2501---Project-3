@@ -48,7 +48,8 @@ def adaptiveSimpson(f, interval, TOL):
     if Error < TOL:
         I2 = I2+(1/15)*(I2-I1)
     else:
-        I2 = adaptiveSimpson(f, (a, c), TOL/2)+adaptiveSimpson(f, (c, b), TOL/2)
+        I2 = adaptiveSimpson(f, (a, c), TOL/2)+adaptiveSimpson(f, (c, b), 
+                             TOL/2)
     return I2
 
 """
