@@ -89,18 +89,18 @@ h=1e-4
 m0=np.array([[1],
              [1],
              [1]])
+Tinv=np.diag((1/L[0],1/L[1],1/L[2]))
 def funk(t,m):
-    T=np.diag(L)
-    return np.cross(m, T @ m,axis=0)#.reshape(1,3)[0]
+    return np.cross(m, Tinv @ m,axis=0)#.reshape(1,3)[0]
 
 def Jac(t, m):
     x1, x2, x3 = m[0,0],m[1,0],m[2,0]
     #print(m)
     #print(x1, x2, x3)
     l1,l2,l3 = L
-    J = np.array([[0,x3*(l3-l2),x2*(l3-l2)],
-                      [x3*(l1-l3),0,x1*(l1-l3)],
-                      [x2*(l2-l1),x1*(l2-l1),0]])
+    J = np.array([[0,x3*(1/l3-1/l2),x2*(1/l3-1/l2)],
+                      [x3*(1/l1-1/l3),0,x1*(1/l1-1/l3)],
+                      [x2*(1/l2-1/l1),x1*(1/l2-1/l1),0]])
     return J
 
 
@@ -109,3 +109,9 @@ print(Jalla[-1])
 
 Jalla2=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0])
 print(Jalla2)
+
+Jalla3=IntM.modiEul((t0,tn), m0, funk,h)
+print(Jalla3[-1])
+
+Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
+print(Jalla4[-1])

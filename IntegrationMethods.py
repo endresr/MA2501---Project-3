@@ -117,8 +117,6 @@ def Newt(func, Jac, x0, t, NIter=100, TOL=1e-7):
     i = 0
     x1 = x0
     while i < NIter:
-        #print(Jac(t,x1))
-        #print(func(t,x1))
         xalm=np.linalg.solve(Jac(t,x1),func(t,x1))
         x2 = x1-xalm
         Fx01 = func(t, x2)
@@ -171,10 +169,10 @@ def modiEul(Interval, InitVal, F, Step):
         The function at time t
     """
     tn = Interval[0]
-    yn = InitVal
+    yn = [InitVal]
     while tn < Interval[1]:
-        ynhalf = yn+.5*Step*F(tn, yn)
-        yn += Step*F(tn+.5*Step, ynhalf)
+        ynhalf = yn[-1]+.5*Step*F(tn, yn[-1])
+        yn.append(yn[-1]+Step*F(tn+.5*Step, ynhalf))
         tn += Step
     return yn
 
@@ -191,10 +189,10 @@ def imprEul(Interval, InitVal, F, Step):
         The function at time t
     """
     tn = Interval[0]
-    yn = InitVal
+    yn = [InitVal]
     while tn < Interval[1]:
-        fn = F(tn, yn)
-        fn2 = F(tn+Step, yn+Step*fn)
-        yn += .5*Step*(fn+fn2)
+        fn = F(tn, yn[-1])
+        fn2 = F(tn+Step, yn[-1]+Step*fn)
+        yn.append( yn[-1]+ .5*Step*(fn+fn2))
         tn += Step
     return yn
