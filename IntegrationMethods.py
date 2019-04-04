@@ -148,11 +148,8 @@ def impMidRungKut(Interval, InitVal, F, Step, Jac):
     t = Interval[0]
     while t < Interval[1]:
         JacK=lambda t,K: np.diag((1,1,1))-Jac(t+Step/2,yn[-1]+Step/2*K)
-        print(JacK(1,np.ones((3,1))))
         Fu=lambda t,K: K-F(t+Step/2,yn[-1]+Step/2*K)
-        print(Fu(1,np.ones((3,1))))
-        print(t)
-        K1 = Newt(Fu, JacK, np.zeros(3,1), t)
+        K1 = Newt(Fu, JacK, np.zeros((3,1)), t)
         yn.append(yn[-1]+Step*K1)
         t += Step
     return yn
