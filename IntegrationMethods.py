@@ -60,7 +60,7 @@ are in conjunction with task 1 c) of the project.
 """
 
 
-def rombergIntegration(f, interval, m, TOL):
+def rombergIntegration(f, interval, m, TOL,Matr=False):
     """
     This is the Romberg integration method
     Inputs:
@@ -68,6 +68,7 @@ def rombergIntegration(f, interval, m, TOL):
         interval = a tuple with the start and ending point of the integration
         m = Maximum allowed dimension for the Romberg matrix
         TOL = The bound we set upon the estimated error. 
+        Matr = whether you want the whole matrix or not.
     Output:
         The estimated definite integral of f
     
@@ -93,8 +94,14 @@ def rombergIntegration(f, interval, m, TOL):
             RombMatr[n][k] = RombMatr[n, k-1]+errCor(n, k)
         if n != 1: #Else the code will divide by zero
             if np.abs(errCor(n, n-1)) < TOL:
-                return RombMatr[n, n-1]
-    return RombMatr[-1, -1]
+                if Matr:
+                    return RombMatr
+                else:
+                    return RombMatr[n, n-1]
+    if Matr:
+        return RombMatr
+    else:
+        return RombMatr[-1, -1]
 
 """
 Implicit Midpoint Runge-Kutta 

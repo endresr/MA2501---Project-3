@@ -38,7 +38,7 @@ plt.loglog(TolRangea,np.absolute(gint-GSim),'k',
            label=r'$f(x)=e^{3x}\sin(2x)$ $x\in[0,\pi/4]$')
 plt.loglog(TolRangea,TolRangea,'k--',label=r"Tolerance")
 plt.xlabel("Tolerance value")
-plt.ylabel(r"Error $\left(\int_a^bf(x)dx-\tilde{I}_{(a,b)}\right)$")
+plt.ylabel(r"Error, $\left|\int_a^bf(x)dx-\tilde{I}_{(a,b)}\right|$")
 plt.title("Error of adaptive Simpson Rule")
 plt.legend()
 plt.show()
@@ -66,6 +66,32 @@ print("{:<20}{:>15}{:>15}".format("Adaptive Simpson",str(round(FaS,6)),
       str(round(HaS,6))))
 print("{:<20}{:>15}{:>15}".format("Romberg Integration",str(round(Fr,6)),
       str(round(Hr,6))))
+'''
+#Convergence
+IterN=50 #Max iterations for convergence test
+Converg1=IntM.rombergIntegration(f,(0,1),IterN,1e-10,Matr=True)
+Converg2=IntM.rombergIntegration(h,(0,1),IterN,1e-10,Matr=True)
+fig=plt.figure(2,figsize=(16,9),dpi=100,facecolor='xkcd:pale',
+               edgecolor='none')
+plt.subplot(121)
+plt.semilogy(range(IterN),np.absolute(Converg1[:,0]-0),'xkcd:crimson',
+           label=r'$\varepsilon(n,0)=\left|\int_a^bf(x)dx-R(n,0)\right|$')
+plt.semilogy(range(IterN),np.absolute(np.diagonal(Converg1)-0),'k',
+           label=r'$\varepsilon(n,n)=\left|\int_a^bf(x)dx-R(n,n)\right|$')
+plt.xlabel(r"Number of iterations $n$")
+plt.ylabel(r"Error, $\left(\int_a^bf(x)dx-\tilde{I}_{(a,b)}\right)$")
+plt.title(r"Error of Romberg for $f(x)=\cos(2\pi x),$ $x\in[0,1]$")
+plt.legend()
+plt.subplot(122)
+plt.semilogy(range(IterN),np.absolute(Converg2[:,0]-0),'xkcd:crimson',
+           label=r'$\varepsilon(n,0)=\left|\int_a^bf(x)dx-R(n,0)\right|$')
+plt.semilogy(range(IterN),np.absolute(np.diagonal(Converg2)-0),'k',
+           label=r'$\varepsilon(n,n)=\left|\int_a^bf(x)dx-R(n,n)\right|$')
+plt.xlabel(r"Number of iterations $n$")
+plt.ylabel(r"Error, $\left(\int_a^bf(x)dx-\tilde{I}_{(a,b)}\right)$")
+plt.title(r"Error of Romberg for $f(x)=x^{\frac{1}{3}},$ $x\in[0,1]$")
+plt.legend()
+plt.show()'''
 
 """
 Task 2
