@@ -16,16 +16,28 @@ b) The test function for the adaptive Simpson Quadrature is ran in Tests.py
    The plots of the errors are given below
 """
 #Variables and function
-NumbPointa=100
+NumbPointa=1000
 TolRangea = np.linspace(10,1e-10,NumbPointa)
 f = lambda x: np.cos(2*np.pi*x)
 g = lambda x: np.exp(3*x)*np.sin(2*x)
+FaS=IntM.adaptiveSimpson(f,(0,1),1e-7)
+GaS=IntM.adaptiveSimpson(g,(0,np.pi/4),1e-7)
 
 FSim = np.asarray([IntM.adaptiveSimpson(f,(0,1),i) for i in TolRangea])
 GSim = np.asarray([IntM.adaptiveSimpson(g,(0,np.pi/4),i) for i in TolRangea])
 gint = (1/13)*(2+3*np.exp((3*np.pi)/4)) #Value of definite integral of g
 
 #Plot
+print('-'*60)
+print("{:.^60}".format("Definite integral"))
+print('-'*60)
+print("{:<20}{:>20}{:>20}".format(" ","f(x)","g(x)"))
+print("{:<20}{:>20}{:>20}".format("Exact Integral",str(0),
+      r"1/13(2+3exp(3pi/4)"))
+print("{:<20}{:>20}{:>20}".format("Adaptive Simpson",str(round(FaS,14)),
+      str(round(GaS,14))))
+print("{:<20}{:>20}{:>20}".format("Error",str(np.absolute(round(FaS-0,14))),
+      str(round(np.absolute(GaS-gint),14))))
 
 fig=plt.figure(1,figsize=(16,9),dpi=100,facecolor='xkcd:pale',
                edgecolor='none')
@@ -52,7 +64,6 @@ d) The test function for the Romberg integration is ran in Tests.py
 #Variables and function
 h=lambda x:x**(1/3)
 #Integrals
-FaS=IntM.adaptiveSimpson(f,(0,1),1e-7)
 Fr=IntM.rombergIntegration(f,(0,1),10,1e-7)
 HaS=IntM.adaptiveSimpson(h,(0,1),1e-7)
 Hr=IntM.rombergIntegration(h,(0,1),10,1e-7)
@@ -66,7 +77,7 @@ print("{:<20}{:>15}{:>15}".format("Adaptive Simpson",str(round(FaS,6)),
       str(round(HaS,6))))
 print("{:<20}{:>15}{:>15}".format("Romberg Integration",str(round(Fr,6)),
       str(round(Hr,6))))
-'''
+
 #Convergence
 IterN=50 #Max iterations for convergence test
 Converg1=IntM.rombergIntegration(f,(0,1),IterN,1e-10,Matr=True)
@@ -91,7 +102,7 @@ plt.xlabel(r"Number of iterations $n$")
 plt.ylabel(r"Error, $\left(\int_a^bf(x)dx-\tilde{I}_{(a,b)}\right)$")
 plt.title(r"Error of Romberg for $f(x)=x^{\frac{1}{3}},$ $x\in[0,1]$")
 plt.legend()
-plt.show()'''
+plt.show()
 
 """
 Task 2
