@@ -7,6 +7,7 @@
     \sisetup{exponent-product = \cdot} 
     \sisetup{separate-uncertainty = true}
 \usepackage[margin=20mm, tmargin=30mm,headheight=15pt ]{geometry}
+\usepackage[table]{xcolor}
 \usepackage{fancyhdr}
 \usepackage{framed}
 \usepackage{caption}
@@ -33,9 +34,11 @@
 \usepackage{bm}
 
 
+
 \definecolor{XKCDpale}{RGB}{255,249,208}
 \definecolor{XKCDcrimson}{RGB}{140,0,15}
 \definecolor{XKCDpalegray}{RGB}{253,253,254}
+\definecolor{XKCDeggShell}{RGB}{255,255,212}
 
 \sectionfont{\color{XKCDcrimson}}
 \subsectionfont{\color{XKCDcrimson}}
@@ -98,7 +101,7 @@
     % import sumpy as symp\end{lstlisting}
 \end{titlepage}
 \restoregeometry
-\twocolumn
+
 
 \section*{Problem 1}
 \subsection*{a)}
@@ -109,7 +112,7 @@ divide the interval \([a,b]\) in \(n\) subintervals\\ \([x_{i-1},x_i]\), \(i=1,\
 
 This will generally give a better approximation than to only run the Simpson method over the original interval, but it happens that a finer partition of an interval doesn't result in better approximation, e.g. if the function is a polynomial of grade 3 or lower the Simpson method will give the exact solution. In these situations, it is superfluous too further divide the interval and thus do more calculations. One would therefore prefer if the method could decide on whether it has reached a sufficient fine partition or not.
 
-This leads up to the Adaptive Simpson \\Method. We take a general subinterval \([a_j,b_j]\) and use Simpson to get an estimate \(I_0=S(a_j,b_j)\) and then use the composite Simpson method on it with two subintervals to get the estimate \(I_1\). If \(I_0\) and \(I_1\) is sufficiently close, we can conclude that \(I_0\) is reasonably close, so any further division of the subinterval will be superfluous. Otherwise the subinterval is divided into two smaller subintervals which the same procedure is done on. This gives a recursive formula. 
+This motivates the Adaptive Simpson Method. We take a general subinterval \([a_j,b_j]\) and use Simpson to get an estimate \(I_0=S(a_j,b_j)\) and then use the composite Simpson method on it with two subintervals to get the estimate \(I_1\). If \(I_0\) and \(I_1\) is sufficiently close, we can conclude that \(I_0\) is reasonably close, so any further division of the subinterval will be superfluous. Otherwise the subinterval is divided into two smaller subintervals which the same procedure is done on. This gives a recursive formula. 
 
 To give a criteria for when \(I_0\) and \(I_1\) is sufficiently close, we look at the relationship between the error bound for Simpson on one interval and composite Simpson with two subintervals. The absolute error for the Simpson method over \([a_j,b_j]\) (\(\varepsilon_{[a_j,b_j]}\)) is bounded by 
 \[\varepsilon_{[a_j,b_j]}\leq \frac{(b_j-a_j)^5}{2880}M_4,\quad M_4=\max_{\eta\in(a_j,b_j)}|f^{(4)}(\eta)|\]
@@ -141,24 +144,11 @@ This result in
 \end{equation*}
 Finally
 \[\left|\int_{a_j}^{b_j}f(x)dx-I_1\right|\approx\frac{1}{15}\left|I_0-I_1\right|\]
-That will say that if \(\frac{1}{15}|I_0-I_1|<TOL\) then \(I_1\) is within the tolerance limit set, over that subinterval. Therefore we can use this as en estimate of whether \(I_0\) and \(I_1\) is sifficiently close. For each time we divide a subinterval into two smallet subintervals, we half the tolerance for the method on those intervals.  
-\subsection*{b)}
+Thus, if \(\frac{1}{15}|I_0-I_1|<TOL\), \(I_1\) is within the tolerance limit set, over that subinterval. Therefore we can use this as en estimate of whether \(I_0\) and \(I_1\) is sifficiently close. For each time we divide a subinterval into two smallet subintervals, we half the tolerance for the method on those intervals.  
 
-\begin{table}[h]
-\begin{tabular}{|l|l|l|l|}
-\hline
-$\textbf{f(x)}$                     & \textbf{Exact}               & \textbf{Estimate} & \textbf{Error} \\ \hline
-$cos(2 \pi x)$, $x \in [0, 1]$      & 0                            & Sett inn          & Sett inn       \\ \hline
-$e^{3x}sin(2x)$, $x \in [0, \pi/4]$ & $\frac{1}{13}(2+3e^{3\pi/4})$ & Sett inn          & Sett inn       \\ \hline
-\end{tabular}
-\end{table}
-\subsection*{c)}
-\newpage
-gbbr
-reeg3wgergwrgsgz
+
 \thispagestyle{noheader}
-\onecolumn
-\newgeometry{margin=20mm, tmargin=0.61\paperwidth,headheight=15pt}
+\newgeometry{margin=20mm, tmargin=0.55\paperwidth,headheight=15pt}
 \refstepcounter{figure}
 \label{fig:graph}
 \begin{tikzpicture}[remember picture,overlay]
@@ -167,6 +157,21 @@ reeg3wgergwrgsgz
     \node[below= 0.15cm  of graph] {Figure \arabic{figure}: The errors of the adaptive Simpson Rule with decreasing tolerance, for different functions.};
 \end{tikzpicture}
 
+\subsection*{b)}
+
+From Figure \ref{fig:graph}, one can observe that the adaptive Simpson method gives a result with a error below the tolerance for tolerance values in the range \([10,10^{-10}]\). In table \ref{tab:simps} the values from a tolerance of \(10^{-7}\) is reproduced, and 
+\begin{table}[h]
+\centering
+\begin{tabular}{p{2cm}p{2.5cm}ll}
+
+\rowcolor{XKCDpale}$\textbf{f(x)}$                     & \textbf{Exact}               & \textbf{Simpson} & \textbf{Error} \\ 
+$cos(2 \pi x)$, \newline$x \in [0, 1]$      & 0                            & 0          & 0       \\ 
+$e^{3x}sin(2x)$, \newline$x \in [0, \dfrac{\pi}{4}]$ & $\frac{1}{13}(2+3e^{3\pi/4})$ \newline$\approx 2.588629$& 2.588629          & 0       \\ 
+\end{tabular}
+\caption{Values from the Simpson method ran on the respective functions ($f(x)$), with tolerance $1\cdot10^{-7}$}
+\label{tab:simps}
+\end{table}
 \restoregeometry
+\subsection*{c)}
 
 \end{document}
