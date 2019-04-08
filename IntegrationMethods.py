@@ -48,7 +48,8 @@ def adaptiveSimpson(f, interval, TOL):
     if Error < TOL:
         I2 = I2+(1/15)*(I2-I1)
     else:
-        I2 = adaptiveSimpson(f, (a, c), TOL/2)+adaptiveSimpson(f, (c, b), TOL/2)
+        I2 = adaptiveSimpson(f, (a, c), TOL/2)+adaptiveSimpson(f, (c, b), 
+                             TOL/2)
     return I2
 
 """
@@ -59,7 +60,7 @@ are in conjunction with task 1 c) of the project.
 """
 
 
-def rombergIntegration(f, interval, m, TOL):
+def rombergIntegration(f, interval, m, TOL,Matr=False):
     """
     This is the Romberg integration method
     Inputs:
@@ -67,6 +68,7 @@ def rombergIntegration(f, interval, m, TOL):
         interval = a tuple with the start and ending point of the integration
         m = Maximum allowed dimension for the Romberg matrix
         TOL = The bound we set upon the estimated error. 
+        Matr = whether you want the whole matrix or not.
     Output:
         The estimated definite integral of f
     
@@ -92,8 +94,14 @@ def rombergIntegration(f, interval, m, TOL):
             RombMatr[n][k] = RombMatr[n, k-1]+errCor(n, k)
         if n != 1: #Else the code will divide by zero
             if np.abs(errCor(n, n-1)) < TOL:
-                return RombMatr[n, n-1]
-    return RombMatr[-1, -1]
+                if Matr:
+                    return RombMatr
+                else:
+                    return RombMatr[n, n-1]
+    if Matr:
+        return RombMatr
+    else:
+        return RombMatr[-1, -1]
 
 """
 Implicit Midpoint Runge-Kutta 
@@ -117,8 +125,6 @@ def Newt(func, Jac, x0, t, NIter=100, TOL=1e-7):
     i = 0
     x1 = x0
     while i < NIter:
-        #print(Jac(t,x1))
-        #print(func(t,x1))
         xalm=np.linalg.solve(Jac(t,x1),func(t,x1))
         x2 = x1-xalm
         Fx01 = func(t, x2)
@@ -149,7 +155,9 @@ def impMidRungKut(Interval, InitVal, F, Step, Jac):
     yn = [InitVal]
     t = Interval[0]
     while t < Interval[1]:
-        K1 = Newt(F, Jac, yn[-1], t)
+        JacK=lambda t,K: np.diag((1,1,1))-Jac(t+Step/2,yn[-1]+Step/2*K)
+        Fu=lambda t,K: K-F(t+Step/2,yn[-1]+Step/2*K)
+        K1 = Newt(Fu, JacK, np.zeros((3,1)), t)
         yn.append(yn[-1]+Step*K1)
         t += Step
     return yn
@@ -171,10 +179,10 @@ def modiEul(Interval, InitVal, F, Step):
         The function at time t
     """
     tn = Interval[0]
-    yn = InitVal
+    yn = [InitVal]
     while tn < Interval[1]:
-        ynhalf = yn+.5*Step*F(tn, yn)
-        yn += Step*F(tn+.5*Step, ynhalf)
+        ynhalf = yn[-1]+.5*Step*F(tn, yn[-1])
+        yn.append(yn[-1]+Step*F(tn+.5*Step, ynhalf))
         tn += Step
     return yn
 
@@ -191,10 +199,10 @@ def imprEul(Interval, InitVal, F, Step):
         The function at time t
     """
     tn = Interval[0]
-    yn = InitVal
+    yn = [InitVal]
     while tn < Interval[1]:
-        fn = F(tn, yn)
-        fn2 = F(tn+Step, yn+Step*fn)
-        yn += .5*Step*(fn+fn2)
+        fn = F(tn, yn[-1])
+        fn2 = F(tn+Step, yn[-1]+Step*fn)
+        yn.append( yn[-1]+ .5*Step*(fn+fn2))
         tn += Step
     return yn
