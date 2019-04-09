@@ -16,7 +16,7 @@ b) The test function for the adaptive Simpson Quadrature is ran in Tests.py
    The plots of the errors are given below
 """
 #Variables and function
-NumbPointa=1000
+NumbPointa=100
 TolRangea = np.linspace(1,1e-11,NumbPointa)
 f = lambda x: np.cos(2*np.pi*x)
 g = lambda x: np.exp(3*x)*np.sin(2*x)
@@ -79,7 +79,7 @@ print("{:<20}{:>15}{:>15}".format("Romberg Integration",str(round(Fr,6)),
       str(round(Hr,6))))
 
 #Convergence
-IterN=10 #Max iterations for convergence test
+IterN=20 #Max iterations for convergence test
 Converg1=IntM.rombergIntegration(f,(0,1),IterN,1e-10,Matr=True)
 Converg2=IntM.rombergIntegration(h,(0,1),IterN,1e-10,Matr=True)
 
