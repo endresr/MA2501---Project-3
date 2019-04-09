@@ -177,4 +177,16 @@ $e^{3x}sin(2x)$, \newline$x \in [0, \dfrac{\pi}{4}]$ & $\frac{1}{13}(2+3e^{3\pi/
 The composite Trapezium rule follows the same idea as the composite Simpson method. Here we are to explore another method which actively adapts itself until it reaches a good result, in an effort to minimize needless work. The main difference from ASM is that this method is more global. ASM tried to exploit that Simpson can work great at some local neighbourhoods in the given interval, but Romberg method, which we shall soon familiarize, uses more global properties over the whole interval.
 
 First, lets look at the error of the composite 
+
+\thispagestyle{noheader}
+\newgeometry{margin=20mm, tmargin=0.55\paperwidth,headheight=15pt}
+\refstepcounter{figure}
+\label{fig:graph}
+\begin{tikzpicture}[remember picture,overlay]
+    \fill[color=XKCDpale] ($(current page.north west)-(0,{0.6\paperwidth})$) rectangle (current page.north east);
+    \node (graph) at ($(current page.north)-(0,0.3\paperwidth)$) {\includegraphics[width=0.9\paperwidth]{pltRombConv.png}};
+    \node[below= 0.15cm  of graph] {Figure \arabic{figure}: The errors of the adaptive Simpson Rule with decreasing tolerance, for different functions.};
+\end{tikzpicture}
+\subsection*{d)}
+\restoregeometry
 \end{document}
