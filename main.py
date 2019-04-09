@@ -229,7 +229,7 @@ X2,Y2,Z2=ellipsEnerg(m0,L)
 fig = plt.figure(dpi=100, figsize=(10,10))
 ax = fig.add_subplot(111, projection='3d')
 ax.set_proj_type('ortho')
-#plt.axis('off')
+plt.axis('off')
 ax.plot_surface(
     X,Y,Z,
     alpha=0.5,
