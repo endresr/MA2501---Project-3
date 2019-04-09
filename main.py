@@ -16,7 +16,7 @@ b) The test function for the adaptive Simpson Quadrature is ran in Tests.py
    The plots of the errors are given below
 """
 #Variables and function
-NumbPointa=1000
+NumbPointa=100
 TolRangea = np.linspace(1,1e-11,NumbPointa)
 f = lambda x: np.cos(2*np.pi*x)
 g = lambda x: np.exp(3*x)*np.sin(2*x)
@@ -153,3 +153,10 @@ print(Jalla3[-1])
 
 Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
 print(Jalla4[-1])
+
+#gamma = IntM.gamma(Jalla3)
+#print(gamma)
+
+
+#gamma2 = IntM.gamma(Jalla4)
+#print(gamma2)

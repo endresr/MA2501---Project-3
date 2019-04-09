@@ -206,3 +206,14 @@ def imprEul(Interval, InitVal, F, Step):
         yn.append( yn[-1]+ .5*Step*(fn+fn2))
         tn += Step
     return yn
+
+
+
+def gamma(list_y):
+    gamma = np.zeros(len(list_y))
+    #print(gamma)
+    for i in range (len(list_y)):
+        #print("liste[i] transpose: ",np.transpose(list_y[i]))
+        #print("liste[i]: ",list_y[i])
+        gamma[i]= np.transpose(list_y[i]).dot(list_y[i])
+    return gamma
