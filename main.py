@@ -157,6 +157,7 @@ print(Jalla4[-1])
 '''
 #gamma = IntM.gamma(Jalla3)
 #print(gamma)
+
 def gamSphere(m):
     theta=np.linspace(-np.pi/2,np.pi/2,1000)
     phi=np.linspace(-np.pi,np.pi,1000)
@@ -167,7 +168,7 @@ def gamSphere(m):
     return x,y,z
 def ellipsEnerg(m,L):
     Tinver=np.diag((1/np.asarray(L)))
-    const=.5*M.T @ (Tinver @ m)
+    const=.5*m.T @ (Tinver @ m)
     rx,ry,rz=.5*1/np.asarray(L)
     theta=np.linspace(-np.pi/2,np.pi/2,1000)
     phi=np.linspace(-np.pi,np.pi,1000)
@@ -176,11 +177,45 @@ def ellipsEnerg(m,L):
     z=rz*np.outer(np.ones(np.size(theta)),np.cos(phi))
     return x,y,z
 
+def intersectSphEll(m0,L):
+    const=.5*m.T @ (Tinver @ m)
+    r = m.T @ m
+    rx,ry,rz=.5*1/np.asarray(L)
+    circ=lambda phi,theta: return np.array([[r*np.cos(theta)*np.sin(phi)],
+                                           [r*np.sin(theta)*np.sin(phi)],
+                                           [r*np.cos(phi)]])
+    ellips=lambda phi,theta: return np.array([[rx*np.cos(theta)*np.sin(phi)],
+                                              [ry*np.sin(theta)*np.sin(phi)],
+                                              [rz*np.cos(phi)]])
+    theta=np.linspace(-np.pi/2,np.pi/2,1000)
+    phi=np.linspace(-np.pi,np.pi,1000)
+    sol=[]
+    for t in theta:
+        for e in phi:
+            s=circ(e,t)
+            t=ellips(e,t)
+            if e==t:
+                sol.append(s)
+    return sol
+        
+'''def plotIntersect(m0,Solution):
+    X,Y,Z=gamSphere(m0)
+    X2,Y2,Z2=
+    fig = plt.figure(dpi=300,figsize=(10,10))
+    ax = fig.gca(projection='3d')
+    plt.axis('off')
+    ax.plot_surface(X,Y,Z,alpha=0.5,rstride=4,cstride=4,color='#f6f6f0')
+    plt.show()'''
+
 X,Y,Z=gamSphere(m0)
-fig = plt.figure(dpi=300,figsize=(10,10))
+X2,Y2,Z2=intersectSphEll(m0,L)
+fig = plt.figure(dpi=100,figsize=(10,10))
 ax = fig.gca(projection='3d')
-ax.plot_surface(X,Y,Z,alpha=0.5)
+plt.axis('off')
+ax.plot_surface(X,Y,Z,alpha=0.5,rstride=4,cstride=4,color='#f6f6f0')
+ax.plot(X2,Y2,Z2)
 plt.show()
+
 #gammaRef=
 #EnerRef=
 
