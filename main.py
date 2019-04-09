@@ -156,7 +156,18 @@ print(Jalla4[-1])
 
 #gamma = IntM.gamma(Jalla3)
 #print(gamma)
-
+def gamSphere(m):
+    theta=np.linspace(-np.pi/2,np.pi/2,1000)
+    phi=np.linspace(-np.pi,np.pi,1000)
+    r=m.T @ m
+    x=r*np.sin(theta)*np.cos(phi)
+    y=r*np.sin(theta)*np.sin(phi)
+    z=r*np.cos(theta)
+    return x,y,z
+def gamEnerg(n):
+    
+gammaRef=
+EnerRef=
 
 #gamma2 = IntM.gamma(Jalla4)
 #print(gamma2)
