@@ -273,7 +273,7 @@ ax.plot(
     )
 
 
-ax.view_init(60, 45)
+ax.view_init(10, 45)
 
 plt.show()
 
