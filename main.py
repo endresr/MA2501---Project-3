@@ -83,7 +83,7 @@ IterN=20 #Max iterations for convergence test
 Converg1=IntM.rombergIntegration(f,(0,1),IterN,1e-10,Matr=True)
 Converg2=IntM.rombergIntegration(h,(0,1),IterN,1e-10,Matr=True)
 
-fig=plt.figure(2,figsize=(16,4),dpi=300,facecolor='xkcd:pale',
+fig=plt.figure(2,figsize=(16,4),dpi=100,facecolor='xkcd:pale',
                edgecolor='none')
 plt.subplot(121)
 plt.semilogy(range(IterN),np.absolute(Converg1[:,0]-0),'xkcd:crimson',
@@ -142,8 +142,8 @@ def Jac(t, m):
     return J
 
 
-#Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
-#print(Jalla[-1])
+Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
+print(Jalla[-1])
 
 Reference=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0]).y[:,2].reshape((3,1))
 print(Reference)
@@ -165,9 +165,9 @@ def gamSphere(m):
     z=r*np.cos(theta)
     return x,y,z
 def gamEnerg(n):
-    
-gammaRef=
-EnerRef=
+    return 'Hei'    
+#gammaRef=
+#EnerRef=
 
 #gamma2 = IntM.gamma(Jalla4)
 #print(gamma2)

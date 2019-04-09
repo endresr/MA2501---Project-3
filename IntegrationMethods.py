@@ -92,7 +92,7 @@ def rombergIntegration(f, interval, m, TOL,Matr=False):
         RombMatr[n][0] = (1/2)*RombMatr[n-1, 0]+hn*addition
         for k in range(1, n+1):
             RombMatr[n,k] = RombMatr[n, k-1]+errCor(n, k)
-        if n != 1: #Else the code will divide by zero
+        if n != 1: 
             if np.abs(errCor(n, n-1)) < TOL:
                 if Matr:
                     return RombMatr
@@ -151,15 +151,14 @@ def impMidRungKut(Interval, InitVal, F, Step, Jac):
     Output:
         The function at time t
     """
-    
+    a,b=Interval
     yn = [InitVal]
-    t = Interval[0]
-    while t < Interval[1]:
+    tim = np.linspace(a,b,(b-a)/Step)
+    for t in tim:
         JacK=lambda t,K: np.diag((1,1,1))-Jac(t+Step/2,yn[-1]+Step/2*K)
         Fu=lambda t,K: K-F(t+Step/2,yn[-1]+Step/2*K)
         K1 = Newt(Fu, JacK, np.zeros((3,1)), t)
         yn.append(yn[-1]+Step*K1)
-        t += Step
     return yn
 
 """Per 28.03.18 18:40 kan det se ut som det er oppgitt formelen for modified
@@ -178,12 +177,12 @@ def modiEul(Interval, InitVal, F, Step):
     Output:
         The function at time t
     """
-    tn = Interval[0]
+    a,b=Interval
+    tim = np.linspace(a,b,(b-a)/Step)
     yn = [InitVal]
-    while tn < Interval[1]:
+    for tn in tim:
         ynhalf = yn[-1]+.5*Step*F(tn, yn[-1])
         yn.append(yn[-1]+Step*F(tn+.5*Step, ynhalf))
-        tn += Step
     return yn
 
 def imprEul(Interval, InitVal, F, Step):
@@ -198,13 +197,13 @@ def imprEul(Interval, InitVal, F, Step):
     Output:
         The function at time t
     """
-    tn = Interval[0]
+    a,b=Interval
+    tim = np.linspace(a,b,(b-a)/Step)
     yn = [InitVal]
-    while tn < Interval[1]:
+    for tn in tim:
         fn = F(tn, yn[-1])
         fn2 = F(tn+Step, yn[-1]+Step*fn)
         yn.append( yn[-1]+ .5*Step*(fn+fn2))
-        tn += Step
     return yn
 
 
