@@ -121,7 +121,7 @@ to find the inverse jacobian. Surely we could have made the function more
 general, but for little gain.
 """
 
-L=(1,2,3)#Tensor values
+L=(1,2,5)#Tensor values
 t0=0#Start-time
 tn=1#end-time
 h=1e-2
@@ -225,10 +225,20 @@ print("printer jalla: ", Jalla)
 print("printer jalla[0]", Jalla[0])
 X,Y,Z=gamSphere(m0)
 X2,Y2,Z2=ellipsEnerg(m0,L)
-fig = plt.figure(dpi=100,figsize=(10,10))
-ax = fig.gca(projection='3d')
-plt.axis('off')
-ax.plot_surface(X,Y,Z,alpha=0.5,rstride=4,cstride=4,color='#f6f6f0')
+
+fig = plt.figure(dpi=100, figsize=(10,10))
+ax = fig.add_subplot(111, projection='3d')
+ax.set_proj_type('ortho')
+#plt.axis('off')
+ax.plot_surface(
+    X,Y,Z,
+    alpha=0.5,
+    rstride=4,
+    cstride=4,
+    color='#f6f6f0',
+    #edgecolor='gray',
+    linewidth =1,
+)
 #ax.plot_surface(X2,Y2,Z2)
 
 
@@ -251,7 +261,19 @@ ax.plot(
     markersize=4,
     lw=1,
 )
-ax.view_init(50, 45)
+
+ax.plot(
+        [m0[0,0]], [m0[1,0]], [m0[2,0]],
+        'o',
+        markerfacecolor='white',
+        markeredgecolor='black',
+        markersize=8,
+        zorder=25,
+        label="Initialverdi $\mathbf m_0$"
+    )
+
+
+ax.view_init(60, 45)
 
 plt.show()
 
