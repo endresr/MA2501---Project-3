@@ -87,11 +87,11 @@ def rombergIntegration(f, interval, m, TOL,Matr=False):
     for n in range(1, m):
         addition = 0
         hn = hn*1/2
-        for i in range(2**(n-1)):
-            addition += f(a+(2*i+1)*hn)
+        for i in range(1,2**(n-1)+1):
+            addition += f(a+(2*i-1)*hn)
         RombMatr[n][0] = (1/2)*RombMatr[n-1, 0]+hn*addition
-        for k in range(1, n):
-            RombMatr[n][k] = RombMatr[n, k-1]+errCor(n, k)
+        for k in range(1, n+1):
+            RombMatr[n,k] = RombMatr[n, k-1]+errCor(n, k)
         if n != 1: #Else the code will divide by zero
             if np.abs(errCor(n, n-1)) < TOL:
                 if Matr:
