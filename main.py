@@ -79,11 +79,11 @@ print("{:<20}{:>15}{:>15}".format("Romberg Integration",str(round(Fr,6)),
       str(round(Hr,6))))
 
 #Convergence
-IterN=10 #Max iterations for convergence test
+IterN=20 #Max iterations for convergence test
 Converg1=IntM.rombergIntegration(f,(0,1),IterN,1e-10,Matr=True)
 Converg2=IntM.rombergIntegration(h,(0,1),IterN,1e-10,Matr=True)
 
-fig=plt.figure(2,figsize=(16,9),dpi=100,facecolor='xkcd:pale',
+fig=plt.figure(2,figsize=(16,4),dpi=100,facecolor='xkcd:pale',
                edgecolor='none')
 plt.subplot(121)
 plt.semilogy(range(IterN),np.absolute(Converg1[:,0]-0),'xkcd:crimson',
