@@ -128,6 +128,7 @@ h=1e-3
 m0=np.array([[1],
              [1],
              [1]])
+m0 = m0 * 1/np.linalg.norm(m0)
 Tinv=np.diag((1/L[0],1/L[1],1/L[2]))
 def funk(t,m):
     return np.cross(m, Tinv @ m,axis=0)#.reshape(1,3)[0]
@@ -182,8 +183,8 @@ def plotSphere(x,y,z,X,Y,Z,Title="ODE-Solver"):
                     color ='xkcd:pale',
                     edgecolors="darkgray")
     ax.plot(X,Y,Z,color="xkcd:crimson")
-    ax.scatter((X[0]+0.1),(Y[0]+0.1),(Z[0]+0.1),'o',color="black",s=80)
-    ax.view_init(90,180)
+    ax.scatter((X[0]),(Y[0]),(Z[0]),'o',color="black",s=80)
+    ax.view_init(0,340)
     plt.title(Title)
     plt.show()
     
