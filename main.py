@@ -143,44 +143,47 @@ def Jac(t, m):
     return J
 
 
-Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
-print(Jalla[-1])
+#Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
+#print(Jalla[-1])
 
-Reference=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0]).y[:,2].reshape((3,1))
-print(Reference)
+#Reference=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0]).y[:,2].reshape((3,1))
+#print(Reference)
 
-Jalla3=IntM.modiEul((t0,tn), m0, funk,h)
-print(Jalla3[-1])
+#Jalla3=IntM.modiEul((t0,tn), m0, funk,h)
+#print(Jalla3[-1])
+
 
 Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
 print(Jalla4[-1])
 '''
+
 #gamma = IntM.gamma(Jalla3)
 #print(gamma)
 def gamSphere(m):
-    theta=np.linspace(-np.pi/2,np.pi/2,1000)
-    phi=np.linspace(-np.pi,np.pi,1000)
+    theta=np.linspace(0,2*np.pi,100)
+    phi=np.linspace(0,np.pi,100)
     r=m.T @ m
-    x=r*np.outer(np.cos(theta),np.sin(phi))
-    y=r*np.outer(np.sin(theta),np.sin(phi))
-    z=r*np.outer(np.ones(np.size(theta)),np.cos(phi))
-    return x,y,z
-def ellipsEnerg(m,L):
-    Tinver=np.diag((1/np.asarray(L)))
-    const=.5*M.T @ (Tinver @ m)
-    rx,ry,rz=.5*1/np.asarray(L)
-    theta=np.linspace(-np.pi/2,np.pi/2,1000)
-    phi=np.linspace(-np.pi,np.pi,1000)
-    x=rx*np.outer(np.cos(theta),np.sin(phi))
-    y=ry*np.outer(np.sin(theta),np.sin(phi))
-    z=rz*np.outer(np.ones(np.size(theta)),np.cos(phi))
-    return x,y,z
 
-X,Y,Z=gamSphere(m0)
-fig = plt.figure(dpi=300,figsize=(10,10))
-ax = fig.gca(projection='3d')
-ax.plot_surface(X,Y,Z,alpha=0.5)
-plt.show()
+    x = r*np.outer(np.cos(theta), np.sin(phi))
+    y = r*np.outer(np.sin(theta), np.sin(phi))
+    z = r*np.outer(np.ones(np.size(theta)), np.cos(phi))
+    return x,y,z
+def gamEnerg(n):
+    return 'Hei'    
+
+def plotSphere(x,y,z):
+    fig = plt.figure(figsize = (10,10))
+    ax = fig.gca(projection = '3d')
+    plt.axis('off')
+    ax.plot_surface(x, y, z, rstride=4, cstride=4, alpha = 0.5, color ='xkcd:pale', edgecolors="darkgray")
+    plt.show()
+    
+
+x, y, z =gamSphere(m0)
+plotSphere(x, y, z)
+
+
+
 #gammaRef=
 #EnerRef=
 
