@@ -155,10 +155,11 @@ def impMidRungKut(Interval, InitVal, F, Step, Jac):
     yn = InitVal
     tim = np.linspace(a,b,(b-a)/Step)
     for t in tim:
-        JacK=lambda t,K: np.diag((1,1,1))-Jac(t+Step/2,yn[:,-1]+Step/2*K)
-        Fu=lambda t,K: K-F(t+Step/2,yn[:,-1]+Step/2*K)
+        y=yn[:,-1].copy().reshape(3,1)
+        JacK=lambda t,K: np.diag((1,1,1))-Jac(t+Step/2,y+Step/2*K)
+        Fu=lambda t,K: K-F(t+Step/2,y+Step/2*K)
         K1 = Newt(Fu, JacK, np.zeros((3,1)), t)
-        yn=np.append(yn,yn[:,-1]+Step*K1,axis=1)
+        yn=np.append(yn,y+Step*K1,axis=1)
     return yn
 
 """Per 28.03.18 18:40 kan det se ut som det er oppgitt formelen for modified
@@ -181,8 +182,9 @@ def modiEul(Interval, InitVal, F, Step):
     tim = np.linspace(a,b,(b-a)/Step)
     yn = InitVal
     for tn in tim:
-        ynhalf = yn[:,-1]+.5*Step*F(tn, yn[:,-1])
-        yn=np.append(yn,yn[:,-1]+Step*F(tn+.5*Step, ynhalf),axis=1)
+        y=yn[:,-1].copy().reshape(3,1)
+        ynhalf = y+.5*Step*F(tn, y)
+        yn=np.append(yn,y+Step*F(tn+.5*Step, ynhalf),axis=1)
     return yn
 
 def imprEul(Interval, InitVal, F, Step):
@@ -201,7 +203,8 @@ def imprEul(Interval, InitVal, F, Step):
     tim = np.linspace(a,b,(b-a)/Step)
     yn = InitVal
     for tn in tim:
-        fn = F(tn, yn[:,-1])
-        fn2 = F(tn+Step, yn[:,-1]+Step*fn)
-        yn=np.append(yn, yn[:,-1]+ .5*Step*(fn+fn2),axis=1)
+        y=yn[:,-1].copy().reshape(3,1)
+        fn = F(tn, y)
+        fn2 = F(tn+Step, y+Step*fn)
+        yn=np.append(yn, y+ .5*Step*(fn+fn2),axis=1)
     return yn
