@@ -152,13 +152,13 @@ def impMidRungKut(Interval, InitVal, F, Step, Jac):
         The function at time t
     """
     a,b=Interval
-    yn = [InitVal]
+    yn = InitVal
     tim = np.linspace(a,b,(b-a)/Step)
     for t in tim:
-        JacK=lambda t,K: np.diag((1,1,1))-Jac(t+Step/2,yn[-1]+Step/2*K)
-        Fu=lambda t,K: K-F(t+Step/2,yn[-1]+Step/2*K)
+        JacK=lambda t,K: np.diag((1,1,1))-Jac(t+Step/2,yn[:,-1]+Step/2*K)
+        Fu=lambda t,K: K-F(t+Step/2,yn[:,-1]+Step/2*K)
         K1 = Newt(Fu, JacK, np.zeros((3,1)), t)
-        yn.append(yn[-1]+Step*K1)
+        yn=np.append(yn,yn[:,-1]+Step*K1,axis=1)
     return yn
 
 """Per 28.03.18 18:40 kan det se ut som det er oppgitt formelen for modified
@@ -179,10 +179,10 @@ def modiEul(Interval, InitVal, F, Step):
     """
     a,b=Interval
     tim = np.linspace(a,b,(b-a)/Step)
-    yn = [InitVal]
+    yn = InitVal
     for tn in tim:
-        ynhalf = yn[-1]+.5*Step*F(tn, yn[-1])
-        yn.append(yn[-1]+Step*F(tn+.5*Step, ynhalf))
+        ynhalf = yn[:,-1]+.5*Step*F(tn, yn[:,-1])
+        yn=np.append(yn,yn[:,-1]+Step*F(tn+.5*Step, ynhalf),axis=1)
     return yn
 
 def imprEul(Interval, InitVal, F, Step):
@@ -199,20 +199,9 @@ def imprEul(Interval, InitVal, F, Step):
     """
     a,b=Interval
     tim = np.linspace(a,b,(b-a)/Step)
-    yn = [InitVal]
+    yn = InitVal
     for tn in tim:
-        fn = F(tn, yn[-1])
-        fn2 = F(tn+Step, yn[-1]+Step*fn)
-        yn.append( yn[-1]+ .5*Step*(fn+fn2))
+        fn = F(tn, yn[:,-1])
+        fn2 = F(tn+Step, yn[:,-1]+Step*fn)
+        yn=np.append(yn, yn[:,-1]+ .5*Step*(fn+fn2),axis=1)
     return yn
-
-
-
-def gamma(list_y):
-    gamma = np.zeros(len(list_y))
-    #print(gamma)
-    for i in range (len(list_y)):
-        #print("liste[i] transpose: ",np.transpose(list_y[i]))
-        #print("liste[i]: ",list_y[i])
-        gamma[i]= np.transpose(list_y[i]).dot(list_y[i])
-    return gamma

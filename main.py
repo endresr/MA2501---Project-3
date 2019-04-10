@@ -17,7 +17,7 @@ b) The test function for the adaptive Simpson Quadrature is ran in Tests.py
    The plots of the errors are given below
 """
 #Variables and function
-'''NumbPointa=100
+NumbPointa=100
 TolRangea = np.linspace(1,1e-11,NumbPointa)
 f = lambda x: np.cos(2*np.pi*x)
 g = lambda x: np.exp(3*x)*np.sin(2*x)
@@ -104,7 +104,7 @@ plt.xlabel(r"Number of iterations $n$")
 plt.ylabel(r"Error, $\left(\int_a^bf(x)dx-\tilde{I}_{(a,b)}\right)$")
 plt.title(r"Error of Romberg for $f(x)=x^{\frac{1}{3}},$ $x\in[0,1]$")
 plt.legend()
-plt.show()'''
+plt.show()
 
 """
 Task 2
@@ -120,11 +120,11 @@ The code is hardcoded for three variable vectorfunctions and needs the user
 to find the inverse jacobian. Surely we could have made the function more 
 general, but for little gain.
 """
-'''
+
 L=(1,2,3)#Tensor values
 t0=0#Start-time
 tn=1#end-time
-h=1e-4
+h=1e-3
 m0=np.array([[1],
              [1],
              [1]])
@@ -143,8 +143,8 @@ def Jac(t, m):
     return J
 
 
-#Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
-#print(Jalla[-1])
+Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
+print(Jalla[:,-1])
 
 #Reference=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0]).y[:,2].reshape((3,1))
 #print(Reference)
@@ -153,9 +153,9 @@ def Jac(t, m):
 #print(Jalla3[-1])
 
 
-Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
-print(Jalla4[-1])
-'''
+#Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
+#print(Jalla4[-1])
+
 
 #gamma = IntM.gamma(Jalla3)
 #print(gamma)
@@ -171,16 +171,23 @@ def gamSphere(m):
 def gamEnerg(n):
     return 'Hei'    
 
-def plotSphere(x,y,z):
+def plotSphere(x,y,z,X,Y,Z,Title="ODE-Solver"):
     fig = plt.figure(figsize = (10,10))
     ax = fig.gca(projection = '3d')
     plt.axis('off')
-    ax.plot_surface(x, y, z, rstride=4, cstride=4, alpha = 0.5, color ='xkcd:pale', edgecolors="darkgray")
+    ax.plot_surface(x, y, z,
+                    rstride=4,
+                    cstride=4,
+                    alpha = 0.5,
+                    color ='xkcd:pale',
+                    edgecolors="darkgray")
+    ax.plot(X,Y,Z,color="xkcd:crimson")
+    ax.scatter(X[0],Y[0],Z[0],'wo')
     plt.show()
     
 
 x, y, z =gamSphere(m0)
-plotSphere(x, y, z)
+plotSphere(x, y, z,Jalla[0,:],Jalla[1,:],Jalla[2,:])
 
 
 
