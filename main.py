@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 This is the main module for project 3 in MA2501
-Authors: Anne Bakkebø, Thomas Schjem and Endre Rundsveen
+Authors: Anna Bakkebø, Thomas Schjem and Endre Rundsveen
 """
 import numpy as np
 import scipy.integrate as spi
@@ -123,7 +123,7 @@ general, but for little gain.
 
 L=(1,2,3)#Tensor values
 t0=0#Start-time
-tn=100#end-time
+tn=1#end-time
 h=1e-3
 m0=np.array([[1],
              [1],

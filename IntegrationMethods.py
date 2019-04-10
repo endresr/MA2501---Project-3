@@ -45,7 +45,7 @@ def adaptiveSimpson(f, interval, TOL):
     c = (a+b)/2
     I2 = Simpson(f, (a, c))+Simpson(f, (c, b)) #Composite Simpson with two subint
     Error = (1/15)*np.abs(I2-I1)
-    if Error < TOL:
+    if Error <= TOL:
         I2 = I2+(1/15)*(I2-I1)
     else:
         I2 = adaptiveSimpson(f, (a, c), TOL/2)+adaptiveSimpson(f, (c, b), 
@@ -82,7 +82,7 @@ def rombergIntegration(f, interval, m, TOL,Matr=False):
     RombMatr[0, 0] = (1/2)*hn*(f(a)+f(b))
     #Needed function
     def errCor(n, k):
-        return (1/(4**(k)-1))*(RombMatr[n, k-1]-RombMatr[n-1, k-1])
+        return (1/((4**k)-1))*(RombMatr[n, k-1]-RombMatr[n-1, k-1])
     #Main
     for n in range(1, m):
         addition = 0
