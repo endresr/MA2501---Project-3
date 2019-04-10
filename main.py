@@ -167,20 +167,47 @@ oppg2c=dictValues.get('2c')
 oppg2d=dictValues.get('2d')
 
 #2c
-fig=plt.figure(3)
-plt.subplot(111)
-plt.loglog(oppg2c[0],oppg2c[1],'x')
-plt.loglog(oppg2c[0],oppg2c[2],'o')
-plt.loglog(oppg2c[0],[x**2 for x in oppg2c[0]])
+fig,(ax1,ax2)=plt.subplots(2,1,
+    sharex=True,
+    figsize=(6.4,6.4),
+    facecolor='xkcd:pale')
+fig.suptitle("Errors of the methods for decreasing step size")
+ax1.set_title("RK midpoint")
+ax1.loglog(oppg2c[0],oppg2c[1],'x',color="xkcd:crimson")
+ax1.loglog(oppg2c[0],[x**2 for x in oppg2c[0]],'k--')
+ax1.set_ylabel(r"Error")
+ax2.set_title("Improved Euler")
+ax2.loglog(oppg2c[0],oppg2c[2],'x',color="xkcd:crimson")
+ax2.loglog(oppg2c[0],[x**2 for x in oppg2c[0]],'k--')
+ax2.set_ylabel(r"Error")
+ax2.set_xlabel("Step size")
+
 plt.show()
 
 
 #2d
-#fig=plt.figure(4)
-#plt.subplot(111)
-#plt.loglog(oppg2d[0],np.linalg.norm(oppg2d[1]-oppg2d[3]))
-#plt.loglog(oppg2d[0],np.linalg.norm(oppg2d[2]-oppg2d[3]))
-#plt.show()
+
+fig,(ax1,ax2)=plt.subplots(2,1,
+    sharex=True,
+    figsize=(6.4,6.4),
+    facecolor='xkcd:pale')
+fig.suptitle("Errors of the methods for increasing time")
+ax1.set_title("RK midpoint")
+ax1.loglog(oppg2d[0],oppg2d[4][0],'x',
+           color="xkcd:crimson",label=r"Error in $\gamma$")
+ax1.loglog(oppg2d[0],oppg2d[4][1],'k--',
+           label=r"Error in Energy $E$")
+ax1.set_ylabel(r"Error")
+ax2.set_title("Improved Euler")
+ax2.loglog(oppg2d[0],oppg2d[5][0],'x',
+           color="xkcd:crimson",label=r"Error in $\gamma$")
+ax2.loglog(oppg2d[0],oppg2d[5][0],'k--',
+           label=r"Error in Energy $E$")
+ax2.set_ylabel(r"Error")
+ax2.set_xlabel("Time")
+
+plt.show()
+
 #2e
 
 def gamSphere(m):
@@ -212,8 +239,16 @@ def plotSphere(x, y, z, X, Y, Z, Title="ODE-Solver"):
 
 
 x, y, z = gamSphere(m0)
-plotSphere(x, y, z, oppg2d[1][0, :], oppg2d[1][1, :], oppg2d[1][2, :],Title="EK - Midpoint, step size: 0.1")
-plotSphere(x, y, z, oppg2d[2][0, :], oppg2d[2][1, :], oppg2d[2][2, :],Title="Improved Euler, step size: 0.1")
-plotSphere(x, y, z, oppg2d[5][0, :], oppg2d[5][1, :], oppg2d[5][2, :],Title="EK - Midpoint, step size: 0.01")
-plotSphere(x, y, z, oppg2d[6][0, :], oppg2d[6][1, :], oppg2d[6][2, :],Title="Improved Euler, step size: 0.01")
+plotSphere(x, y, z, 
+           oppg2d[1][0, :], oppg2d[1][1, :], oppg2d[1][2, :],
+           Title="EK - Midpoint, step size: 0.1")
+plotSphere(x, y, z, 
+           oppg2d[2][0, :], oppg2d[2][1, :], oppg2d[2][2, :],
+           Title="Improved Euler, step size: 0.1")
+plotSphere(x, y, z, 
+           oppg2d[7][0, :], oppg2d[7][1, :], oppg2d[7][2, :],
+           Title="EK - Midpoint, step size: 0.01")
+plotSphere(x, y, z, 
+           oppg2d[8][0, :], oppg2d[8][1, :], oppg2d[8][2, :],
+           Title="Improved Euler, step size: 0.01")
 

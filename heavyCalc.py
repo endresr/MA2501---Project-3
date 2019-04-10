@@ -64,21 +64,52 @@ Mid2=IntM.impMidRungKut((t0,tend),m0,funk,h2,Jac)
 Eul1=IntM.modiEul((t0,tend), m0, funk,h1) 
 Eul2=IntM.modiEul((t0,tend), m0, funk,h2) 
 
+print("Done with Mid1-Eul2")
+
 tlist1=np.linspace(t0,tend,int((tend-t0)/h1))
 tlist2=np.linspace(t0,tend,int((tend-t0)/h2))
 
 Ref1=np.array(
         [spi.solve_ivp(funk,(t0,t),m0.reshape(1,3)[0]).y[:,-1].reshape((3,1))
         for t in tlist1])
+    
 print("Done with Ref1")
+
 Ref2=np.array(
         [spi.solve_ivp(funk,(t0,t),m0.reshape(1,3)[0]).y[:,-1].reshape((3,1))
         for t in tlist2])
+    
 print("Done with Ref2")
+
+def gam(m):
+    return m.T @ m
+def KinErg(m):
+    return .5*m.T @ (Tinv @ m)
+
+def Err2d(List,Ref):
+    Worklist=List[:,1:]
+    ArrErrGam=np.zeros(Worklist.shape[1])
+    ArrErrKin=np.zeros(Worklist.shape[1])
+    print(ArrErrKin.shape)
+    for i in range(Worklist.shape[1]):
+        ArrErrGam[i]=np.absolute(gam(Worklist[:,i])-gam(Ref[i].reshape(1,3)))
+        ArrErrKin[i]=np.absolute(KinErg(Worklist[:,i])-KinErg(Ref[i].reshape(1,3)))
+    print(ArrErrKin.shape)
+    print(ArrErrGam.shape)
+    return ArrErrGam,ArrErrKin
+
+ErrMid1=Err2d(Mid1,Ref1)
+ErrMid2=Err2d(Mid2,Ref2)
+EulErr1=Err2d(Eul1,Ref1)
+EulErr2=Err2d(Eul2,Ref2)
+
+print("Done with Error oppg. 2d")
+
 savingDict={'2c':[steps,ErrMid,EulErr],
-            '2d':[tlist1,Mid1,Eul1,Ref1,tlist2,Mid2,Eul2,Ref2]}
+            '2d':[tlist1,Mid1,Eul1,Ref1,ErrMid1,EulErr1,
+                  tlist2,Mid2,Eul2,Ref2,ErrMid2,EulErr2]}
 
 h = open("heavyCalc.pkl","wb")
 pickle.dump(savingDict,h)
 h.close()
-print("Done saving to file")
+print("Done! Saved to file")
