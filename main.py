@@ -241,8 +241,8 @@ ax.plot_surface(
     alpha=0.5,
     rstride=40,
     cstride=40,
-    color='#f6f6f0',
-    edgecolor='gray',
+    color='xkcd:pale',
+    edgecolor='darkgrey',
     linewidth=1,
 )
 # ax.plot_surface(X2,Y2,Z2)
