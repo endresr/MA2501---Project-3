@@ -173,6 +173,7 @@ def plotSphere(x,y,z):
     plt.axis('off')
     ax.plot_surface(x, y, z, rstride=4, cstride=4, alpha = 0.5, color ='xkcd:pale', edgecolors="darkgray")
     plt.show()
+    
 
 x, y, z =gamSphere(m0)
 plotSphere(x, y, z)
