@@ -124,19 +124,17 @@ general, but for little gain.
 L=(1,2,3)#Tensor values
 t0=0#Start-time
 tn=1#end-time
-h=1e-3
+h=1e-4
 m0=np.array([[1],
              [1],
              [1]])
-m0 = m0 * 1/np.linalg.norm(m0)
+m0=m0/np.linalg.norm(m0)
 Tinv=np.diag((1/L[0],1/L[1],1/L[2]))
 def funk(t,m):
-    return np.cross(m, Tinv @ m,axis=0)#.reshape(1,3)[0]
+    return np.cross(m, Tinv @ m,axis=0)
 
 def Jac(t, m):
     x1, x2, x3 = m[0,0],m[1,0],m[2,0]
-    #print(m)
-    #print(x1, x2, x3)
     l1,l2,l3 = L
     J = np.array([[0,x3*(1/l3-1/l2),x2*(1/l3-1/l2)],
                       [x3*(1/l1-1/l3),0,x1*(1/l1-1/l3)],
@@ -147,8 +145,8 @@ def Jac(t, m):
 Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
 print(Jalla[:,-1])
 
-#Reference=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0]).y[:,2].reshape((3,1))
-#print(Reference)
+Reference=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0]).y[:,2].reshape((3,1))
+print(Reference)
 
 #Jalla3=IntM.modiEul((t0,tn), m0, funk,h)
 #print(Jalla3[-1])
@@ -164,13 +162,11 @@ def gamSphere(m):
     theta=np.linspace(0,2*np.pi,100)
     phi=np.linspace(0,np.pi,100)
     r=m.T @ m
-
+    
     x = r*np.outer(np.cos(theta), np.sin(phi))
     y = r*np.outer(np.sin(theta), np.sin(phi))
     z = r*np.outer(np.ones(np.size(theta)), np.cos(phi))
-    return x,y,z
-def gamEnerg(n):
-    return 'Hei'    
+    return x,y,z   
 
 def plotSphere(x,y,z,X,Y,Z,Title="ODE-Solver"):
     fig = plt.figure(figsize = (10,10))
@@ -183,8 +179,8 @@ def plotSphere(x,y,z,X,Y,Z,Title="ODE-Solver"):
                     color ='xkcd:pale',
                     edgecolors="darkgray")
     ax.plot(X,Y,Z,color="xkcd:crimson")
-    ax.scatter((X[0]),(Y[0]),(Z[0]),'o',color="black",s=80)
-    ax.view_init(0,340)
+    ax.scatter(X[0],Y[0],Z[0],'o',color="black",s=80)
+    ax.view_init(azim=225)
     plt.title(Title)
     plt.show()
     
