@@ -7,16 +7,17 @@ import numpy as np
 import scipy.integrate as spi
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-import IntegrationMethods as IntM  #The module containing our functions
+import IntegrationMethods as IntM  # The module containing our functions
 
-from Tests import *  #The tests are ran
+from Tests import *  # The tests are ran
+
 """
 Task 1 
 a) Is implemented in IntegrationMethods.py as adaptiveSimpson()
 b) The test function for the adaptive Simpson Quadrature is ran in Tests.py
    The plots of the errors are given below
 """
-#Variables and function
+# Variables and function
 '''NumbPointa=100
 TolRangea = np.linspace(1,1e-11,NumbPointa)
 f = lambda x: np.cos(2*np.pi*x)
@@ -121,94 +122,101 @@ to find the inverse jacobian. Surely we could have made the function more
 general, but for little gain.
 """
 
-L=(1,2,5)#Tensor values
-t0=0#Start-time
-tn=1#end-time
-h=1e-2
-m0=np.array([[1],
-             [1],
-             [1]])
-print(m0.reshape(3,))
-m0 = m0 * (1/np.linalg.norm(m0))
-print (m0)
-Tinv=np.diag((1/L[0],1/L[1],1/L[2]))
-def funk(t,m):
-    return np.cross(m, Tinv @ m,axis=0)#.reshape(1,3)[0]
+L = (1, 2, 5)  # Tensor values
+t0 = 0  # Start-time
+tn = 1  # end-time
+h = 1e-2
+m0 = np.array([[1],
+               [1],
+               [1]])
+print(m0.reshape(3, ))
+m0 = m0 * (1 / np.linalg.norm(m0))
+print(m0)
+Tinv = np.diag((1 / L[0], 1 / L[1], 1 / L[2]))
+
+
+def funk(t, m):
+    return np.cross(m, Tinv @ m, axis=0)  # .reshape(1,3)[0]
+
 
 def Jac(t, m):
-    x1, x2, x3 = m[0,0],m[1,0],m[2,0]
-    #print(m)
-    #print(x1, x2, x3)
-    l1,l2,l3 = L
-    J = np.array([[0,x3*(1/l3-1/l2),x2*(1/l3-1/l2)],
-                      [x3*(1/l1-1/l3),0,x1*(1/l1-1/l3)],
-                      [x2*(1/l2-1/l1),x1*(1/l2-1/l1),0]])
+    x1, x2, x3 = m[0, 0], m[1, 0], m[2, 0]
+    # print(m)
+    # print(x1, x2, x3)
+    l1, l2, l3 = L
+    J = np.array([[0, x3 * (1 / l3 - 1 / l2), x2 * (1 / l3 - 1 / l2)],
+                  [x3 * (1 / l1 - 1 / l3), 0, x1 * (1 / l1 - 1 / l3)],
+                  [x2 * (1 / l2 - 1 / l1), x1 * (1 / l2 - 1 / l1), 0]])
     return J
 
 
-Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
+Jalla = IntM.impMidRungKut((t0, tn), m0, funk, h, Jac)
 print(Jalla[-1])
 
-#Reference=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0]).y[:,2].reshape((3,1))
-#print(Reference)
 
-#Jalla3=IntM.modiEul((t0,tn), m0, funk,h)
-#print(Jalla3[-1])
+# Reference=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0]).y[:,2].reshape((3,1))
+# print(Reference)
 
-#Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
-#print(Jalla4[-1])
+# Jalla3=IntM.modiEul((t0,tn), m0, funk,h)
+# print(Jalla3[-1])
 
-#gamma = IntM.gamma(Jalla3)
-#print(gamma)
+# Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
+# print(Jalla4[-1])
+
+# gamma = IntM.gamma(Jalla3)
+# print(gamma)
 
 def gamSphere(m):
-    theta=np.linspace(-np.pi/2,np.pi/2,1000)
-    phi=np.linspace(-np.pi,np.pi,1000)
-    r=m.T @ m
-    print(r)
-    x=r*np.outer(np.cos(theta),np.sin(phi))
-    y=r*np.outer(np.sin(theta),np.sin(phi))
-    z=r*np.outer(np.ones(np.size(theta)),np.cos(phi))
-    return x,y,z
-
-def ellipsEnerg(m,L):
-    Tinver=np.diag((1/np.asarray(L)))
-    print(Tinver)
-    const=.5*m.T @ (Tinver @ m)
-    rx,ry,rz=.5*1/np.asarray(L)
-    theta=np.linspace(-np.pi/2,np.pi/2,1000)
-    phi=np.linspace(-np.pi,np.pi,1000)
-    x=rx*np.outer(np.cos(theta),np.sin(phi))
-    y=ry*np.outer(np.sin(theta),np.sin(phi))
-    z=rz*np.outer(np.ones(np.size(theta)),np.cos(phi))
-    return x,y,z
-
-def intersectSphEll(m,L):
-    const=.5*m.T @ (Tinv @ m)
+    theta = np.linspace(-np.pi / 2, np.pi / 2, 1000)
+    phi = np.linspace(-np.pi, np.pi, 1000)
     r = m.T @ m
-    r=r[0,0]
-    rx,ry,rz=.5*1/np.asarray(L)
+    print(r)
+    x = r * np.outer(np.cos(theta), np.sin(phi))
+    y = r * np.outer(np.sin(theta), np.sin(phi))
+    z = r * np.outer(np.ones(np.size(theta)), np.cos(phi))
+    return x, y, z
+
+
+def ellipsEnerg(m, L):
+    Tinver = np.diag((1 / np.asarray(L)))
+    print(Tinver)
+    const = .5 * m.T @ (Tinver @ m)
+    rx, ry, rz = .5 * 1 / np.asarray(L)
+    theta = np.linspace(-np.pi / 2, np.pi / 2, 1000)
+    phi = np.linspace(-np.pi, np.pi, 1000)
+    x = rx * np.outer(np.cos(theta), np.sin(phi))
+    y = ry * np.outer(np.sin(theta), np.sin(phi))
+    z = rz * np.outer(np.ones(np.size(theta)), np.cos(phi))
+    return x, y, z
+
+
+def intersectSphEll(m, L):
+    const = .5 * m.T @ (Tinv @ m)
+    r = m.T @ m
+    r = r[0, 0]
+    rx, ry, rz = .5 * 1 / np.asarray(L)
     print(r, rx, ry, rz)
-    circ = lambda phi,theta:  np.array([[r*np.cos(theta)*np.sin(phi)],
-                                           [r*np.sin(theta)*np.sin(phi)],
-                                           [r*np.cos(phi)]])
-    ellips = lambda phi,theta:  np.array([[rx*np.cos(theta)*np.sin(phi)],
-                                              [ry*np.sin(theta)*np.sin(phi)],
-                                              [rz*np.cos(phi)]])
-    theta=np.linspace(-np.pi/2,np.pi/2,100)
-    phi=np.linspace(-np.pi,np.pi,100)
-    sol=[[],[],[]]
-    print("Theta and phi:",theta, phi)
+    circ = lambda phi, theta: np.array([[r * np.cos(theta) * np.sin(phi)],
+                                        [r * np.sin(theta) * np.sin(phi)],
+                                        [r * np.cos(phi)]])
+    ellips = lambda phi, theta: np.array([[rx * np.cos(theta) * np.sin(phi)],
+                                          [ry * np.sin(theta) * np.sin(phi)],
+                                          [rz * np.cos(phi)]])
+    theta = np.linspace(-np.pi / 2, np.pi / 2, 100)
+    phi = np.linspace(-np.pi, np.pi, 100)
+    sol = [[], [], []]
+    print("Theta and phi:", theta, phi)
     for t in theta:
-        print("T-value:",t)
+        print("T-value:", t)
         print()
         for e in phi:
-            s=circ(e,t)
-            t1=ellips(e,t)
-            if np.all(s==t1):
+            s = circ(e, t)
+            t1 = ellips(e, t)
+            if np.all(s == t1):
                 sol.append(s)
     return sol
-        
+
+
 '''def plotIntersect(m0,Solution):
     X,Y,Z=gamSphere(m0)
     X2,Y2,Z2=
@@ -218,68 +226,63 @@ def intersectSphEll(m,L):
     ax.plot_surface(X,Y,Z,alpha=0.5,rstride=4,cstride=4,color='#f6f6f0')
     plt.show()'''
 
+# print("Jalla. x, y, z: ",Jalla[:][0][0])
+#print("printer jalla: ", Jalla)
+#print("printer jalla[0]", Jalla[0])
+X, Y, Z = gamSphere(m0)
+X2, Y2, Z2 = ellipsEnerg(m0, L)
 
-
-#print("Jalla. x, y, z: ",Jalla[:][0][0])
-print("printer jalla: ", Jalla)
-print("printer jalla[0]", Jalla[0])
-X,Y,Z=gamSphere(m0)
-X2,Y2,Z2=ellipsEnerg(m0,L)
-
-fig = plt.figure(dpi=100, figsize=(10,10))
+fig = plt.figure(dpi=100, figsize=(10, 10))
 ax = fig.add_subplot(111, projection='3d')
 ax.set_proj_type('ortho')
 plt.axis('off')
 ax.plot_surface(
-    X,Y,Z,
+    X, Y, Z,
     alpha=0.5,
-    rstride=4,
-    cstride=4,
+    rstride=40,
+    cstride=40,
     color='#f6f6f0',
-    #edgecolor='gray',
-    linewidth =1,
+    edgecolor='gray',
+    linewidth=1,
 )
-#ax.plot_surface(X2,Y2,Z2)
+# ax.plot_surface(X2,Y2,Z2)
 
 
 rx = []
 ry = []
 rz = []
 for element in Jalla:
-    #print("Elementene er: ",element)
-    rx.append(element[0,0])
-    ry.append(element[1,0])
-    rz.append(element[2,0])
-    #print(rx,ry,rz)
-
+    # print("Elementene er: ",element)
+    rx.append(element[0, 0])
+    ry.append(element[1, 0])
+    rz.append(element[2, 0])
+    # print(rx,ry,rz)
 
 ax.plot(
     rx, ry, rz,
     'k-',
-    #label="Løysing $\mathbf m(t)$ med implisitt RK",
+    # label="Løysing $\mathbf m(t)$ med implisitt RK",
     zorder=6,
     markersize=4,
     lw=1,
 )
 
 ax.plot(
-        [m0[0,0]], [m0[1,0]], [m0[2,0]],
-        'o',
-        markerfacecolor='white',
-        markeredgecolor='black',
-        markersize=8,
-        zorder=25,
-        label="Initialverdi $\mathbf m_0$"
-    )
-
+    [m0[0, 0]], [m0[1, 0]], [m0[2, 0]],
+    'o',
+    markerfacecolor='white',
+    markeredgecolor='black',
+    markersize=8,
+    zorder=25,
+    label="Initialverdi $\mathbf m_0$"
+)
 
 ax.view_init(10, 45)
 
 plt.show()
 
+# gammaRef=
+# EnerRef=
 
-#gammaRef=
-#EnerRef=
-
-#gamma2 = IntM.gamma(Jalla4)
-#print(gamma2)
+# gamma2 = IntM.gamma(Jalla4)
+# print(gamma2)
