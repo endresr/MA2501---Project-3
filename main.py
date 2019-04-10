@@ -6,6 +6,7 @@ Authors: Anne Bakkebø, Thomas Schjem and Endre Rundsveen
 import numpy as np
 import scipy.integrate as spi
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import IntegrationMethods as IntM  #The module containing our functions
 
 from Tests import *  #The tests are ran
@@ -16,7 +17,7 @@ b) The test function for the adaptive Simpson Quadrature is ran in Tests.py
    The plots of the errors are given below
 """
 #Variables and function
-NumbPointa=100
+'''NumbPointa=100
 TolRangea = np.linspace(1,1e-11,NumbPointa)
 f = lambda x: np.cos(2*np.pi*x)
 g = lambda x: np.exp(3*x)*np.sin(2*x)
@@ -103,7 +104,7 @@ plt.xlabel(r"Number of iterations $n$")
 plt.ylabel(r"Error, $\left(\int_a^bf(x)dx-\tilde{I}_{(a,b)}\right)$")
 plt.title(r"Error of Romberg for $f(x)=x^{\frac{1}{3}},$ $x\in[0,1]$")
 plt.legend()
-plt.show()
+plt.show()'''
 
 """
 Task 2
@@ -119,7 +120,7 @@ The code is hardcoded for three variable vectorfunctions and needs the user
 to find the inverse jacobian. Surely we could have made the function more 
 general, but for little gain.
 """
-
+'''
 L=(1,2,3)#Tensor values
 t0=0#Start-time
 tn=1#end-time
@@ -151,8 +152,10 @@ def Jac(t, m):
 #Jalla3=IntM.modiEul((t0,tn), m0, funk,h)
 #print(Jalla3[-1])
 
-#Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
-#print(Jalla4[-1])
+
+Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
+print(Jalla4[-1])
+'''
 
 #gamma = IntM.gamma(Jalla3)
 #print(gamma)
@@ -160,6 +163,7 @@ def gamSphere(m):
     theta=np.linspace(0,2*np.pi,100)
     phi=np.linspace(0,np.pi,100)
     r=m.T @ m
+
     x = r*np.outer(np.cos(theta), np.sin(phi))
     y = r*np.outer(np.sin(theta), np.sin(phi))
     z = r*np.outer(np.ones(np.size(theta)), np.cos(phi))
@@ -177,6 +181,7 @@ def plotSphere(x,y,z):
 
 x, y, z =gamSphere(m0)
 plotSphere(x, y, z)
+
 
 
 #gammaRef=
