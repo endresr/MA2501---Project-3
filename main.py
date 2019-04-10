@@ -123,8 +123,8 @@ general, but for little gain.
 
 L=(1,2,3)#Tensor values
 t0=0#Start-time
-tn=1#end-time
-h=1e-4
+tn=100#end-time
+h=1e-3
 m0=np.array([[1],
              [1],
              [1]])
