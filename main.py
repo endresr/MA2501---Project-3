@@ -182,7 +182,9 @@ def plotSphere(x,y,z,X,Y,Z,Title="ODE-Solver"):
                     color ='xkcd:pale',
                     edgecolors="darkgray")
     ax.plot(X,Y,Z,color="xkcd:crimson")
-    ax.scatter(X[0],Y[0],Z[0],'wo')
+    ax.scatter((X[0]+0.1),(Y[0]+0.1),(Z[0]+0.1),'o',color="black",s=80)
+    ax.view_init(90,180)
+    plt.title(Title)
     plt.show()
     
 
