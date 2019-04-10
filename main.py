@@ -17,7 +17,7 @@ b) The test function for the adaptive Simpson Quadrature is ran in Tests.py
    The plots of the errors are given below
 """
 #Variables and function
-'''NumbPointa=100
+'''NumbPointa=500
 TolRangea = np.linspace(1,1e-11,NumbPointa)
 f = lambda x: np.cos(2*np.pi*x)
 g = lambda x: np.exp(3*x)*np.sin(2*x)
@@ -120,7 +120,7 @@ The code is hardcoded for three variable vectorfunctions and needs the user
 to find the inverse jacobian. Surely we could have made the function more 
 general, but for little gain.
 """
-'''
+
 L=(1,2,3)#Tensor values
 t0=0#Start-time
 tn=1#end-time
@@ -143,18 +143,31 @@ def Jac(t, m):
     return J
 
 
-Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
-print(Jalla[-1])
 
 Reference=spi.solve_ivp(funk,(t0,tn),m0.reshape(1,3)[0]).y[:,2].reshape((3,1))
 print(Reference)
+'''
+Jalla=IntM.impMidRungKut((t0,tn), m0, funk, h, Jac)
+print(Jalla[-1])
 
 Jalla3=IntM.modiEul((t0,tn), m0, funk,h)
 print(Jalla3[-1])
 
 Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
-print(Jalla4[-1])
-'''
+print(Jalla4[-1])'''
+
+#Loglog-plot of error vs. step-size
+NumbPointb = 20
+TolRangeb = np.linspace(1e-3,1e-5,NumbPointb)
+
+MidErr=np.asarray([np.linalg.norm(IntM.impMidRungKut((t0,tn),m0,funk,Step,Jac)[-1]-Reference) for Step in TolRangeb])
+ImprEulErr=np.asarray([np.linalg.norm(IntM.modiEul((t0,tn),m0,funk,Step)[-1]-Reference) for Step in TolRangeb])
+
+fig=plt.figure(3,facecolor="xkcd:pale")
+plt.xlim(TolRangeb[0],TolRangeb[-1])
+plt.loglog(TolRangeb,MidErr)
+plt.loglog(TolRangeb,ImprEulErr,'k+')
+plt.show()
 #gamma = IntM.gamma(Jalla3)
 #print(gamma)
 
@@ -166,37 +179,7 @@ def gamSphere(m):
     y=r*np.outer(np.sin(theta),np.sin(phi))
     z=r*np.outer(np.ones(np.size(theta)),np.cos(phi))
     return x,y,z
-def ellipsEnerg(m,L):
-    Tinver=np.diag((1/np.asarray(L)))
-    const=.5*m.T @ (Tinver @ m)
-    rx,ry,rz=.5*1/np.asarray(L)
-    theta=np.linspace(-np.pi/2,np.pi/2,1000)
-    phi=np.linspace(-np.pi,np.pi,1000)
-    x=rx*np.outer(np.cos(theta),np.sin(phi))
-    y=ry*np.outer(np.sin(theta),np.sin(phi))
-    z=rz*np.outer(np.ones(np.size(theta)),np.cos(phi))
-    return x,y,z
 
-def intersectSphEll(m0,L):
-    const=.5*m.T @ (Tinver @ m)
-    r = m.T @ m
-    rx,ry,rz=.5*1/np.asarray(L)
-    circ=lambda phi,theta: return np.array([[r*np.cos(theta)*np.sin(phi)],
-                                           [r*np.sin(theta)*np.sin(phi)],
-                                           [r*np.cos(phi)]])
-    ellips=lambda phi,theta: return np.array([[rx*np.cos(theta)*np.sin(phi)],
-                                              [ry*np.sin(theta)*np.sin(phi)],
-                                              [rz*np.cos(phi)]])
-    theta=np.linspace(-np.pi/2,np.pi/2,1000)
-    phi=np.linspace(-np.pi,np.pi,1000)
-    sol=[]
-    for t in theta:
-        for e in phi:
-            s=circ(e,t)
-            t=ellips(e,t)
-            if e==t:
-                sol.append(s)
-    return sol
         
 '''def plotIntersect(m0,Solution):
     X,Y,Z=gamSphere(m0)
@@ -206,15 +189,21 @@ def intersectSphEll(m0,L):
     plt.axis('off')
     ax.plot_surface(X,Y,Z,alpha=0.5,rstride=4,cstride=4,color='#f6f6f0')
     plt.show()'''
-
+'''
 X,Y,Z=gamSphere(m0)
-X2,Y2,Z2=intersectSphEll(m0,L)
+#X2,Y2,Z2=intersectSphEll(m,L)
 fig = plt.figure(dpi=100,figsize=(10,10))
 ax = fig.gca(projection='3d')
 plt.axis('off')
-ax.plot_surface(X,Y,Z,alpha=0.5,rstride=4,cstride=4,color='#f6f6f0')
-ax.plot(X2,Y2,Z2)
-plt.show()
+ax.plot_surface(X,Y,Z,
+                alpha=0.5,
+                rstride=4,
+                cstride=4,
+                color='xkcd:pale',
+                shade=True)
+ax.scatter3D(X2,Y2,Z2)
+#ax.plot(X2,Y2,Z2)
+plt.show()'''
 
 #gammaRef=
 #EnerRef=
