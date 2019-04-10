@@ -7,6 +7,7 @@ import numpy as np
 import scipy.integrate as spi
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import pickle
 import IntegrationMethods as IntM  # The module containing our functions
 
 from Tests import *  # The tests are ran
@@ -146,11 +147,11 @@ def Jac(t, m):
     return J
 
 
-Jalla = IntM.impMidRungKut((t0, tn), m0, funk, h, Jac)
-print(Jalla[:, -1])
+#Jalla = IntM.impMidRungKut((t0, tn), m0, funk, h, Jac)
+#print(Jalla[:, -1])
 
-Reference = spi.solve_ivp(funk, (t0, tn), m0.reshape(1, 3)[0]).y[:, 2].reshape((3, 1))
-print(Reference)
+#Reference = spi.solve_ivp(funk, (t0, tn), m0.reshape(1, 3)[0]).y[:, 2].reshape((3, 1))
+#print(Reference)
 
 
 # Jalla3=IntM.modiEul((t0,tn), m0, funk,h)
@@ -159,7 +160,19 @@ print(Reference)
 
 # Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
 # print(Jalla4[-1])
+with open('heavyCalc.pkl','rb') as d:
+    dictValues=pickle.load(d)
 
+oppg2c=dictValues.get('2c')
+oppg2d=dictValues.get('2d')
+
+#2c
+fig=plt.figure(3)
+plt.subplot(111)
+plt.loglog(oppg2c[0],oppg2c[1])
+plt.loglog(oppg2c[0],oppg2c[2])
+plt.loglog(oppg2c[0],x^2)
+plt.show()
 
 # gamma = IntM.gamma(Jalla3)
 # print(gamma)
