@@ -174,8 +174,15 @@ plt.loglog(oppg2c[0],oppg2c[2],'o')
 plt.loglog(oppg2c[0],[x**2 for x in oppg2c[0]])
 plt.show()
 
-# gamma = IntM.gamma(Jalla3)
-# print(gamma)
+
+#2d
+#fig=plt.figure(4)
+#plt.subplot(111)
+#plt.loglog(oppg2d[0],np.linalg.norm(oppg2d[1]-oppg2d[3]))
+#plt.loglog(oppg2d[0],np.linalg.norm(oppg2d[2]-oppg2d[3]))
+#plt.show()
+#2e
+
 def gamSphere(m):
     theta = np.linspace(0, 2 * np.pi, 100)
     phi = np.linspace(0, np.pi, 100)
@@ -205,10 +212,8 @@ def plotSphere(x, y, z, X, Y, Z, Title="ODE-Solver"):
 
 
 x, y, z = gamSphere(m0)
-plotSphere(x, y, z, Jalla[0, :], Jalla[1, :], Jalla[2, :])
+plotSphere(x, y, z, oppg2d[1][0, :], oppg2d[1][1, :], oppg2d[1][2, :],Title="EK - Midpoint, step size: 0.1")
+plotSphere(x, y, z, oppg2d[2][0, :], oppg2d[2][1, :], oppg2d[2][2, :],Title="Improved Euler, step size: 0.1")
+plotSphere(x, y, z, oppg2d[5][0, :], oppg2d[5][1, :], oppg2d[5][2, :],Title="EK - Midpoint, step size: 0.01")
+plotSphere(x, y, z, oppg2d[6][0, :], oppg2d[6][1, :], oppg2d[6][2, :],Title="Improved Euler, step size: 0.01")
 
-# gammaRef=
-# EnerRef=
-
-# gamma2 = IntM.gamma(Jalla4)
-# print(gamma2)
