@@ -169,9 +169,9 @@ oppg2d=dictValues.get('2d')
 #2c
 fig=plt.figure(3)
 plt.subplot(111)
-plt.loglog(oppg2c[0],oppg2c[1])
-plt.loglog(oppg2c[0],oppg2c[2])
-plt.loglog(oppg2c[0],x^2)
+plt.loglog(oppg2c[0],oppg2c[1],'x')
+plt.loglog(oppg2c[0],oppg2c[2],'o')
+plt.loglog(oppg2c[0],[x**2 for x in oppg2c[0]])
 plt.show()
 
 # gamma = IntM.gamma(Jalla3)

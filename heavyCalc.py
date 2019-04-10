@@ -30,8 +30,8 @@ def Jac(t, m):
     return J
 
 #Arrays for 2c
-numbPoints=2
-steps=np.linspace(1e-1,1e-4,numbPoints)
+numbPoints=20
+steps=np.linspace(1.5e-1,1e-4,numbPoints)
 tend=1
 RefEnd=spi.solve_ivp(funk,(t0,tend),m0.reshape(1,3)[0]).y[:,2].reshape((3,1))
 
