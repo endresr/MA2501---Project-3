@@ -6,6 +6,7 @@ Authors: Anna Bakkebø, Thomas Schjem and Endre Rundsveen
 import numpy as np
 import scipy.integrate as spi
 import matplotlib.pyplot as plt
+plt.rcParams.update({'font.size': 22})
 from mpl_toolkits.mplot3d import Axes3D
 import pickle
 import IntegrationMethods as IntM  # The module containing our functions
@@ -197,7 +198,7 @@ oppg2d[15][0]+oppg2d[15][1] is the same as oppg2d[5][0]+oppg2d[5][1] only with
     different relative and absolute tolerance
 '''
 #2c
-fig=plt.figure(figsize=(16,4),facecolor="xkcd:pale")
+fig=plt.figure(figsize=(16,4),facecolor="xkcd:pale",dpi=300)
 plt.title("Errors of the methods for decreasing step size")
 plt.loglog(oppg2c[0],oppg2c[2],
            'ks',markerfacecolor="none",
@@ -209,7 +210,7 @@ plt.loglog(oppg2c[0],[x**2 for x in oppg2c[0]],
            'k--', label=r"$h^2$")
 plt.legend(loc=4)
 plt.ylabel(r"Error")
-plt.xlabel(r"Step size, \(h\)")
+plt.xlabel(r"Step size, $h$")
 plt.show()
 
 
