@@ -18,7 +18,9 @@ a) Is implemented in IntegrationMethods.py as adaptiveSimpson()
 b) The test function for the adaptive Simpson Quadrature is ran in Tests.py
    The plots of the errors are given below
 """
+
 # Variables and function
+
 NumbPointa = 100
 TolRangea = np.linspace(1, 1e-11, NumbPointa)
 f = lambda x: np.cos(2 * np.pi * x)
@@ -31,6 +33,7 @@ GSim = np.asarray([IntM.adaptiveSimpson(g, (0, np.pi / 4), i) for i in TolRangea
 gint = (1 / 13) * (2 + 3 * np.exp((3 * np.pi) / 4))  # Value of definite integral of g
 
 # Plot
+
 print('-' * 60)
 print("{:.^60}".format("Definite integral"))
 print('-' * 60)
@@ -63,10 +66,13 @@ c) Is implemented in IntegrationMethods.py as rombergIntegration
 d) The test function for the Romberg integration is ran in Tests.py
     The rest of the task follows.
 """
+
 # Comparing values from adaptive Simpson and Romberg
 # Variables and function
+
 h = lambda x: x ** (1 / 3)
 # Integrals
+
 Fr = IntM.rombergIntegration(f, (0, 1), 10, 1e-7)
 HaS = IntM.adaptiveSimpson(h, (0, 1), 1e-7)
 Hr = IntM.rombergIntegration(h, (0, 1), 10, 1e-7)
@@ -82,6 +88,7 @@ print("{:<20}{:>15}{:>15}".format("Romberg Integration", str(round(Fr, 6)),
                                   str(round(Hr, 6))))
 
 # Convergence
+
 IterN = 20  # Max iterations for convergence test
 Converg1 = IntM.rombergIntegration(f, (0, 1), IterN, 1e-10, Matr=True)
 Converg2 = IntM.rombergIntegration(h, (0, 1), IterN, 1e-10, Matr=True)
@@ -147,25 +154,25 @@ def Jac(t, m):
     return J
 
 
-#Jalla = IntM.impMidRungKut((t0, tn), m0, funk, h, Jac)
-#print(Jalla[:, -1])
-
-#Reference = spi.solve_ivp(funk, (t0, tn), m0.reshape(1, 3)[0]).y[:, 2].reshape((3, 1))
-#print(Reference)
-
-
-# Jalla3=IntM.modiEul((t0,tn), m0, funk,h)
-# print(Jalla3[-1])
-
-
-# Jalla4=IntM.imprEul((t0,tn),m0,funk,h)
-# print(Jalla4[-1])
+#Plots of task 2c,d,e
 with open('heavyCalc.pkl','rb') as d:
     dictValues=pickle.load(d)
 
-oppg2c=dictValues.get('2c')
+oppg2c=dictValues.get('2c') 
+'''The calculations needed for 2c are stored in this list.
+oppg2c[0]=array of stepsizes.
+oppg2c[1]=array of errors for the midpoint method over the interval [0,1] 
+    corresponding to the step sizes in the previous array.
+oppg2c[2]=array of errors for the improved euler method over the interval [0,1] 
+    corresponding to the step sizes in the first array.
+'''
 oppg2d=dictValues.get('2d')
-
+'''
+oppg2d[0:6]=is the same as oppg2d[7:] with step size 1e-1 instead of 1e-2
+oppg2d[0]=Array of timepoints from 0 to 30 with step size 1e-1
+oppg2d[1]=Array of the result from midpoint method over the interval [t0,tn] 
+    where t0 is start-time and tn corresponds to the elements of oppg2d[0]
+'''
 #2c
 fig,(ax1,ax2)=plt.subplots(2,1,
     sharex=True,
@@ -191,17 +198,17 @@ fig,(ax1,ax2)=plt.subplots(2,1,
     sharex=True,
     figsize=(6.4,6.4),
     facecolor='xkcd:pale')
-fig.suptitle("Errors of the methods for increasing time")
+fig.suptitle("Errors of the methods for increasing time with step size 1e-1")
 ax1.set_title("RK midpoint")
-ax1.loglog(oppg2d[0],oppg2d[4][0],'x',
+ax1.semilogy(oppg2d[0],oppg2d[4][0],'x',
            color="xkcd:crimson",label=r"Error in $\gamma$")
-ax1.loglog(oppg2d[0],oppg2d[4][1],'k--',
+ax1.semilogy(oppg2d[0],oppg2d[4][1],'k--',
            label=r"Error in Energy $E$")
 ax1.set_ylabel(r"Error")
 ax2.set_title("Improved Euler")
-ax2.loglog(oppg2d[0],oppg2d[5][0],'x',
+ax2.semilogy(oppg2d[0],oppg2d[5][0],'x',
            color="xkcd:crimson",label=r"Error in $\gamma$")
-ax2.loglog(oppg2d[0],oppg2d[5][0],'k--',
+ax2.semilogy(oppg2d[0],oppg2d[5][0],'k--',
            label=r"Error in Energy $E$")
 ax2.set_ylabel(r"Error")
 ax2.set_xlabel("Time")
@@ -213,7 +220,7 @@ plt.show()
 def gamSphere(m):
     theta = np.linspace(0, 2 * np.pi, 100)
     phi = np.linspace(0, np.pi, 100)
-    r = m.T @ m
+    r = np.sqrt(m.T @ m)
 
     x = r * np.outer(np.cos(theta), np.sin(phi))
     y = r * np.outer(np.sin(theta), np.sin(phi))
@@ -231,8 +238,10 @@ def plotSphere(x, y, z, X, Y, Z, Title="ODE-Solver"):
                     alpha=0.5,
                     color='xkcd:pale',
                     edgecolors="darkgray")
-    ax.plot(X, Y, Z, color="xkcd:crimson")
-    ax.scatter(X[0], Y[0], Z[0], 'o', color="black", s=80)
+    ax.plot(X, Y, Z, 
+            color="xkcd:crimson")
+    ax.scatter(X[0], Y[0], Z[0], 
+               'o', color="black", s=80)
     ax.view_init(azim=225)
     plt.title(Title)
     plt.show()

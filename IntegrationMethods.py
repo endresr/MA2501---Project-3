@@ -160,7 +160,7 @@ def impMidRungKut(Interval, InitVal, F, Step, Jac):
     """
     a, b = Interval
     yn = InitVal
-    tim = np.linspace(a, b, (b - a) / Step)
+    tim = np.linspace(a, b, int((b - a) / Step) -1)
     for t in tim:
         y = yn[:, -1].copy().reshape(3, 1)
         JacK = lambda t, K: np.diag((1, 1, 1)) - Jac(t + Step / 2, y + Step / 2 * K)
@@ -188,7 +188,7 @@ def modiEul(Interval, InitVal, F, Step):
         The function at time t
     """
     a, b = Interval
-    tim = np.linspace(a, b, (b - a) / Step)
+    tim = np.linspace(a, b, int((b - a) / Step) -1)
     yn = InitVal
     for tn in tim:
         y = yn[:, -1].copy().reshape(3, 1)
@@ -210,11 +210,11 @@ def imprEul(Interval, InitVal, F, Step):
         The function at time t
     """
     a, b = Interval
-    tim = np.linspace(a, b, (b - a) / Step)
+    tim = np.linspace(a+Step, b, int((b - a) / Step) - 1)
     yn = InitVal
     for tn in tim:
         y = yn[:, -1].copy().reshape(3, 1)
         fn = F(tn, y)
-        fn2 = F(tn + Step, y + Step * fn)
+        fn2 = F(tn+Step, y + Step * fn)
         yn = np.append(yn, y + .5 * Step * (fn + fn2), axis=1)
     return yn
