@@ -272,7 +272,7 @@ Problem 2 regards the motion of a free rigid body with mass centre at the origin
 \end{array}\right.\]
 where \(T=diag(I_1,I_2,I_3)\), and \(\vec{m}=(y_1,y_2,y_3)^T\) represents the angular momentum of the body. It is to be assumed that \(I_1<I_2<I_3\). A consequence of the physical nature of the problem is that all solutions \(\vec{m}(t)\) to the equations must satisfy 
 \[\gamma=\vec{m}(t)^T\vec{m}(t)=const\qquad E=\frac{1}{2}\vec{m}(t)^T(T^{-1}\vec{m}(t))=const\]
-where \(\gamma\) is the norm of \(\vec{m}(t)\) and \(E\) is the kinetic energy of the body. Thus all solutions has to lie on the intersection of the sphere about the origin given by radius \(\gamma\), and the ellipsoid given by \(E=const\). 
+where \(\gamma\) is the norm of \(\vec{m}(t)\) and \(E\) is the kinetic energy of the body. Thus all solutions has to lie on the intersection of the sphere about the origin given by radius \(\gamma\), and the ellipsoid given by \(E=const\). Throughout this problem, we will work with \(\vec{m}(0)=\frac{1}{\sqrt{3}}(1,1,1)^T\) and \(T=diag(1,2,3)\)
 \subsection*{a)}
 We implemented the ODE-solving routine Runge-Kutta midpoint method, given by formulas
 
@@ -282,7 +282,20 @@ where \(h\) is the step size. This is clearly an implicit method, and by such gi
 which uses the initial guess \(K=\vec{0}\), and jacobian \(J_F=I-J_f(t+\frac{h}{2},y+\frac{h}{2}K)\)
 
 \subsection*{b)}
-The task further asks us to implement the improved Euler method, but gave at the time of implementation the formula for modified Euler method\footnote{As far as we could see, at least.}. Thus both these methods are implemented in the code, but only one of them is used to solve the system of equations later on.
+The task further asks us to implement the improved Euler method, but gave at the time of implementation the formula for modified Euler method\footnote{As far as we could see, at least.}. Thus both these methods are 
+\newgeometry{margin=20mm, bmargin=0.41\paperwidth,tmargin=30mm,headheight=15pt}
+\pagestyle{fancyplain}
+\fancyhf{}
+\lhead{ \fancyplain{}{MA2501} }
+\rhead{ \fancyplain{}{Project 3} }
+\refstepcounter{figure}
+\label{fig:gr2c}
+\begin{tikzpicture}[remember picture,overlay]
+    \fill[color=XKCDpale] ($(current page.south west)+(0,{0.4\paperwidth})$) rectangle (current page.south east);
+    \node (graph) at ($(current page.south)+(0,0.25\paperwidth)$) {\includegraphics[width=0.9\paperwidth]{Graph2c.png}};
+    \node[below= 0.15cm  of graph] {Figure \arabic{figure}: The estimated error for each of the methods over time interval \([0,1]\)};
+\end{tikzpicture}
+implemented in the code, but only one of them is used to solve the system of equations later on.
 The formula for modified Euler is,
 \[y_{n+1} = y_n + hf\left(x_n + \frac{1}{2}h, y_n + \frac{1}{2}hf(x_n, y_n)\right)\]
 and the formula for the improved Euler is
@@ -293,13 +306,8 @@ where $h$ is the step size in both formulas.
 \lstset{language=Python}
 To get a good reference to compare the solution of the free rigid body equations from the Implicit Euler and Midpoint Runge-Kutta to, we used a function from the Python libarary \lstinline{scipy} called \lstinline{scipy.integration.solve_ivp()}. We ran the methods multiple times over the time interval \([0,1]\), with a decreasing step-size, and we expected to observe that the difference (our error-estimate) between the solutions and the reference should decrease with an order of 2. As can be observed in figure \ref{fig:gr2c}, this seems to not be the case. If it had been of order 2, the error should be aligned along lines parallell to the dashed lines in a graph with log-axis. 
 
-After a lot of tinkering with the code without getting any better results, we decided to let it stand as it is. A guess for why we get this result is that there are some problems with the end-time of the reference and the methods, since the errors for both methods seem to align pretty well with each other.
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.5\linewidth]{Graph2c.png}
-    \caption{The estimated error for each of the methods over time interval \([0,1]\)}
-    \label{fig:gr2c}
-\end{figure}
+After a lot of tinkering with the code without getting any better results, we decided to let it stand as it is. A guess for why we get this result is that there may be some problems with the end-time of the reference and the methods. The errors for both methods seem to align pretty well with each other, which would corroborate the guess, since any other cause would most likely not be symmetric across methods.
+
 
 \newgeometry{margin=10mm,tmargin=20mm}
 \thispagestyle{plain}
@@ -314,6 +322,13 @@ After a lot of tinkering with the code without getting any better results, we de
 \end{figure}
 \restoregeometry
 \subsection*{d)}
+In figure
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
 \subsection*{e)}
 Lastly we were to plot the different solutions obtained by the different rigid body integrators as plots on the ''sphere given by $\gamma = \vec{m}(t)^T \vec{m}(t)$''. Our hesitation with this task is that $\gamma$ was a number and not necessarily a sphere. We therefore made the interpretation that the sphere would be the sphere of a ball with radius=$\gamma$.
 \newgeometry{margin=10mm}
