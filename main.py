@@ -44,6 +44,7 @@ print("{:<20}{:>20}{:>20}".format("Adaptive Simpson", str(round(FaS, 14)),
                                   str(round(GaS, 14))))
 print("{:<20}{:>20}{:>20}".format("Error", str(np.absolute(round(FaS - 0, 14))),
                                   str(round(np.absolute(GaS - gint), 14))))
+
 # Plot
 fig = plt.figure(1, figsize=(16, 9), dpi=100, facecolor='xkcd:pale',
                  edgecolor='none')
@@ -191,28 +192,19 @@ oppg2d[6][1]=Array of the error in energy for positions from built-in method
     over the interval [0,tn], where tn comes from oppg2d[0]
 '''
 #2c
-fig,(ax1,ax2)=plt.subplots(2,1,
-    sharex=True,
-    figsize=(6.4,6.4))
-fig.suptitle("Errors of the methods for decreasing step size")
-ax1.set_title("RK midpoint")
-ax1.loglog(oppg2c[0],oppg2c[1],
+fig=plt.figure(figsize=(16,4),facecolor="xkcd:pale")
+plt.title("Errors of the methods for decreasing step size")
+plt.loglog(oppg2c[0],oppg2c[2],
+           'ks',markerfacecolor="none",
+           label=r"Improved Euler")
+plt.loglog(oppg2c[0],oppg2c[1],
            'x',color="xkcd:crimson",
-           label=r"Error")
-ax1.loglog(oppg2c[0],[x**2 for x in oppg2c[0]],
+           label=r"Midpoint RK")
+plt.loglog(oppg2c[0],[x**2 for x in oppg2c[0]],
            'k--', label=r"$h^2$")
-ax1.legend(loc=4)
-ax1.set_ylabel(r"Error")
-ax2.set_title("Improved Euler")
-ax2.loglog(oppg2c[0],oppg2c[2],
-           'x',color="xkcd:crimson",
-           label=r"Error")
-ax2.loglog(oppg2c[0],[x**2 for x in oppg2c[0]],
-           'k--', label=r"$h^2$")
-ax2.legend(loc=4)
-ax2.set_ylabel(r"Error")
-ax2.set_xlabel(r"Step size, $h$")
-
+plt.legend(loc=4)
+plt.ylabel(r"Error")
+plt.xlabel(r"Step size, \(h\)")
 plt.show()
 
 

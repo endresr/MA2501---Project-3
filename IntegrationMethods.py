@@ -55,10 +55,9 @@ def adaptiveSimpson(f, interval, TOL):
 
 
 """
-The following functions,
-    compTrapezoid
+The following function,
     rombergIntegration
-are in conjunction with task 1 c) of the project.
+is in conjunction with task 1 c) of the project.
 """
 
 
@@ -72,8 +71,10 @@ def rombergIntegration(f, interval, m, TOL, Matr=False):
         TOL = The bound we set upon the estimated error. 
         Matr = whether you want the whole matrix or not.
     Output:
-        The estimated definite integral of f
-    
+        If Matr=False:
+            The estimated definite integral of f at given time
+        else:
+            The whole matrix
     The method is implemented following the specifications in the task. 
     """
     # Initializing
@@ -107,6 +108,9 @@ def rombergIntegration(f, interval, m, TOL, Matr=False):
     else:
         return RombMatr[-1, -1]
 
+"""
+Implementations for task 2
+"""
 
 """
 Implicit Midpoint Runge-Kutta 
@@ -156,7 +160,8 @@ def impMidRungKut(Interval, InitVal, F, Step, Jac):
         Jac: One has to provide the jacobian for the expression of the 
             derivative
     Output:
-        The function at time t
+        Array of function values at time t0+i*Step at column i with shape 
+            (3,(b-a)/Step)
     """
     a, b = Interval
     yn = InitVal
@@ -185,7 +190,8 @@ def modiEul(Interval, InitVal, F, Step):
         F: formula for the derivative dependent on time and value of function
         Step: Step-size of the method
     Output:
-        The function at time t
+        Array of function values at time t0+i*Step at column i with shape 
+            (3,(b-a)/Step)
     """
     a, b = Interval
     tim = np.linspace(a, b, int((b - a) / Step) -1)
@@ -207,7 +213,8 @@ def imprEul(Interval, InitVal, F, Step):
         F: formula for the derivative dependent on time and value of function
         Step: Step-size of the method
     Output:
-        The function at time t
+        Array of function values at time t0+i*Step at column i with shape 
+            (3,(b-a)/Step)
     """
     a, b = Interval
     tim = np.linspace(a+Step, b, int((b - a) / Step) - 1)
