@@ -18,6 +18,12 @@
     \rhead{Project 3}
     \lhead{MA2501}
     \rfoot{Page \thepage \ of \pageref{LastPage}}
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \rhead{Project 3}
+    \lhead{MA2501}
+    \fancyfoot{}
+}
 \fancypagestyle{noheader}{
   \fancyhf{}% Clear header/footer
   \renewcommand{\headrulewidth}{0pt}% No header rule
@@ -27,12 +33,13 @@
 \usetikzlibrary{calc}
 \usetikzlibrary{patterns}
 \usetikzlibrary{positioning}
+\usetikzlibrary{cd}
 \usepackage{lettrine}
 \title{Project 3 - MA2501}
 \author{Anna Bakkebø\And Thomas Schjem \And Endre Sørmo Rundsveen}
 \usepackage{sectsty}
 \usepackage{bm}
-
+\usepackage{mathtools}
 
 
 \definecolor{XKCDpale}{RGB}{255,249,208}
@@ -77,8 +84,8 @@
         \foreach \x in {2,3,4,5,6,7,8}
             {\fill[tableBack] (\x cm, 1)--(\x cm, {3+1.15*sin(0.5*pi*\x r)*exp(-\x/4)})--(\x +1,{3+1.15*sin(0.5*pi*(\x+1) r)*exp(-(\x+1)/4)})--(\x +1,1) --cycle;
             \draw[dashed] (\x cm, {3+1.15*sin(0.5*pi*\x r)*exp(-\x/4)})--(\x +1,{3+1.15*sin(0.5*pi*(\x+1) r)*exp(-(\x+1)/4)});}
-        \draw[thick,->] (-2,1)--(15,1);
-        \draw[thick,->] (-2,1)--(-2,8);
+        \draw[thick,->] (0,1)--(15,1);
+        \draw[thick,->] (0,1)--(0,8);
         \foreach \x in {2,3,4,5,6,7,8,9}
             {\draw (\x cm,1cm+2pt)--+(0,-4pt);
             \draw[dashed] (\x ,1)--(\x,{3+1.15*sin(0.5*pi*\x r)*exp(-\x/4)});}
@@ -145,11 +152,12 @@ This result in
 \end{equation*}
 Finally
 \[\left|\int_{a_j}^{b_j}f(x)dx-I_1\right|\approx\frac{1}{15}\left|I_0-I_1\right|\]
-Thus, if \(\frac{1}{15}|I_0-I_1|<TOL\), \(I_1\) is within the tolerance limit set, over that subinterval. Therefore we can use this as en estimate of whether \(I_0\) and \(I_1\) is sufficiently close. For each time we divide a subinterval into two smallet subintervals, we half the tolerance for the method on those intervals.  
+Thus, if \(\frac{1}{15}|I_0-I_1|<TOL\), \(I_1\) is within the tolerance limit set, over that subinterval. Therefore we can use this as en estimate of whether \(I_0\) and \(I_1\) is sufficiently close. For each time we divide a subinterval into two smaller subintervals, we half the tolerance for the method on those intervals.  
 
 
-\thispagestyle{noheader}
+
 \newgeometry{margin=20mm, tmargin=0.55\paperwidth,headheight=15pt}
+\thispagestyle{noheader}
 \refstepcounter{figure}
 \label{fig:graph}
 \begin{tikzpicture}[remember picture,overlay]
@@ -174,19 +182,119 @@ $e^{3x}sin(2x)$, \newline$x \in [0, \dfrac{\pi}{4}]$ & $\frac{1}{13}(2+3e^{3\pi/
 \restoregeometry
 \subsection*{c)}
 \subsubsection*{Theory}
-The composite Trapezium rule follows the same idea as the composite Simpson method. Here we are to explore another method which actively adapts itself until it reaches a good result, in an effort to minimize needless work. The main difference from ASM is that this method is more global. ASM tried to exploit that Simpson can work great at some local neighbourhoods in the given interval, but Romberg method, which we shall soon familiarize, uses more global properties over the whole interval.
+ Here we are going to explore another method, called the Romberg method. This method, as ASM, actively adapts itself until it reaches a good result, in an effort to minimize needless work. Where ASM used the Simpson method as a baseline for its method, this method uses the composite Trapezium rule. Beside this, we have that the main difference from ASM is that this method is more global. ASM tried to exploit that Simpson can work great at some local neighbourhoods in the given interval, but the Romberg method, which we soon will get familiarized with, uses more global properties over the whole interval.
 
-First, lets look at the error of the composite 
+First, lets look at the error of the composite trapezium rule, given by Euler-Maclaurin expansion. If a real-valued function f is defined and continous on the interval \([a,b]\) and has a continous derivative of order \(2k\) on this interval, we have that 
+\[\int_a^bf(x)dx-T(m)=\sum_{r=1}^kc_rh^{2r}[f^{(2r-1)}(b)-f^{(2r-1)}(a)]-\left(\frac{h}{2k}\right)^{(2k)}\sum_{i=1}^m\int_{x_{i-1}}^{x_i}q_{2k}(t)f^{(2k)}(x)dx\]
+where \(T(m)\) is the approximation of the integral of f, with \(m\) subintervals \([x_{i-1},x_1]\), \(i=1,\cdots,m\), and \(t=t(x)=-1+\frac{2}{h}(x-x_{i-1})\) for \(x\in[x_{i-1},x_i]\), \(c_r=q_{2r}(1)/2^{2r}\) for \(r=1,\cdots,k\). For convenience assume \(f\in C^{\infty}[a,b]\). Then we have 
+\begin{equation*}
+\begin{split}
+    \int_a^bf(x)dx-T(m)&=\sum_{r=1}^{\infty}c_r\left(\frac{b-a}{m}\right)^{2r}[f^{(2r-1)}(b)-f^{(2r-1)}(a)]\\
+    &=\sum_{r=1}^{\infty}C_rm^{-2r}
+\end{split}
+\end{equation*}
+where \(C_r=c_r(b-a)^{2r}[f^{(2r-1)}(b)-f^{(2r-1)}(a)]\) is independent of m. Thus, we have
+\[\int_a^bf(x)dx-T(m)=C_1m^{-2}+\mathcal{O}(m^{-4})\]
+\[\int_a^bf(x)dx-T(2m)=C_1(2m)^{-2}+\mathcal{O}(m^{-4})\]
+Combined 
+\[\int_a^bf(x)dx=\frac{4T(2m)-T(m)}{3}+\mathcal{O}(m^{-4})\]
+We have by this method better approximated the integral than either composite trapezium that were first given. This can further be generealized to the recursive expression \(R(n,k)\), where \(R(n,k)=T(2^n)\) for \(k=0\) and
+\[R(n,k)=R(n,k-1)+\frac{1}{4^k-1}[R(n,k-1)-R(n-1,k-1)],\quad k=1,\cdots,n\]
+In figure \ref{fig:RombDiag} one can see the dependencies in the formula. \(R(n,k)\) will approximate \(\int_a^bf(x)dx\) with an accuracy \(\mathcal{O}(2^{n^{-(2k+2)}})\)\footnote{By p. 217 in Süli \& Mayers (2006)} as long as \(f^{(2k+2)}\) exists and is continous on \([a,b]\). 
 
-\thispagestyle{noheader}
-\newgeometry{margin=20mm, tmargin=0.55\paperwidth,headheight=15pt}
+As we can see, this method gives great approximations for the integral. Now we have two remaining tasks on the agenda before implementing Romberg. First we need to optimize the work of finding \(R(n,0)\), since we for each \(n\) evaluate the function in many of the same points as in preceding n's. Therefore we aim to find a recursive formula so that each step do the least amount of work. The second task is to set up the algorithm and define adequate stopping conditions.
+
+First things first. The composite trapezium rule is given by dividing the interval \([a,b]\) into \(m\geq2\) separate subintervals \([x_{i-1},x_i]\), \(i=1,\cdots,m\), where \(x_i=a+ih\), \(i=0,1,\cdots,m\), and \(h=\frac{b-a}{m}\). The integral of \(f\) over each of these intervals is approximated by the trapezium rule, i.e.
+\[\int_{x_{i-1}}^{x_i}f(x)dx\approx\frac{x_{i}-x_{i-1}}{2}[f(x_{i-1}+f(x_i)]=\frac{h}{2}[f(x_{i-1}+f(x_i)]\]
+Therefore, by summing up each of these contribution
+\[\int_a^bf(x)dx\approx h\left[\frac{1}{2}f(x_0)+f(x_1)+\cdots+f(x_{m-1})+\frac{1}{2}f(x_m)\right]=T(m)\]
+So we get 
+\[T(m)=\frac{b-a}{m}\left[\frac{1}{2}f(x_0)+f(x_1)+\cdots+f(x_{m-1})+\frac{1}{2}f(x_m)\right]\]
+and
+\[T(2m)=\frac{b-a}{2m}\left[\frac{1}{2}f(x_0')+f(x_1')+\cdots+f(x_{2m-1}')+\frac{1}{2}f(x_{2m}')\right]\]
+Here \(x_k'=a+k\frac{b-a}{2m}\) for \(k=0,1,\cdots,2m\). This means that \(x_i=x_{2i}'\), and we can therefore rewrite \(T(2m)\) as
+\begin{equation*}
+\begin{split}
+T(2m)&=\frac{1}{2}T(m)+\frac{b-a}{2m}\sum_{i=i}^{2m-1}f(x_{2i-1}')\\
+&=\frac{1}{2}T(m)+h_{2m}\sum_{i=i}^{2m-1}f(a+(2i-1)h_{2m})
+\end{split}
+\end{equation*}
+where \(h_{2m}=\frac{b-a}{2m}\), given that we have \(T(m)\). To finish we need to define the basestep for the recursive formula. Not surprising, we choose \(T(1)=\frac{b-a}{2}[f(a)+f(b)]\).
+
+The algorithm soon follows by combining the formulas from above, and remembering that \(R(n,0)=T(2^n)\). What we lack is a condition for the process to terminate. At one time we either need the process to end because the error has reached a sufficient bound (TOL) or it has reached a maximum of iterations. Lets define 
+\[E(n,k)=\frac{1}{4^k-1}[R(n,k-1)-R(n-1,k-1)]\]
+This is what is added to the \((n,k-1)'th\) element to get the \((n,k)\) element. Therefore this should serve as an adequate approximation of the error, i.e. if \(|E(n,k)|<TOL\), the process terminates. If we also bound \(n\) above with an \(m\), we get a maximum number of iterations even if the error never gets small enough. 
+
+In the implementation in this project this maximal iteration level has been reached by running the process over an \(m\times m\) matrix where the \((i,j)'th\) element is updated to \(R(i,j)\) if \(i\leq j\) and the process has not terminated. By updating the matrix row by row, the process should be as efficient as possible.
+
+
+
+\newgeometry{margin=20mm, bmargin=0.41\paperwidth,tmargin=30mm,headheight=15pt}
+\pagestyle{fancyplain}
+\fancyhf{}
+\lhead{ \fancyplain{}{MA2501} }
+\rhead{ \fancyplain{}{Project 3} }
 \refstepcounter{figure}
-\label{fig:graph}
+\label{fig:graph2}
 \begin{tikzpicture}[remember picture,overlay]
-    \fill[color=XKCDpale] ($(current page.north west)-(0,{0.6\paperwidth})$) rectangle (current page.north east);
-    \node (graph) at ($(current page.north)-(0,0.3\paperwidth)$) {\includegraphics[width=0.9\paperwidth]{pltRombConv.png}};
-    \node[below= 0.15cm  of graph] {Figure \arabic{figure}: The errors of the adaptive Simpson Rule with decreasing tolerance, for different functions.};
+    \fill[color=XKCDpale] ($(current page.south west)+(0,{0.4\paperwidth})$) rectangle (current page.south east);
+    \node (graph) at ($(current page.south)+(0,0.25\paperwidth)$) {\includegraphics[width=0.9\paperwidth]{pltRombConv.png}};
+    \node[below= 0.15cm  of graph] {Figure \arabic{figure}: The errors of the Romberg Methood with increasing number of iterations, for different functions.};
 \end{tikzpicture}
+\begin{figure}
+    \centering
+    \tikzcd
+T(1)=R(0,0)\arrow[dr,color=Mahogany]&&&& \\
+T(2)=R(1,0)\arrow[r]\arrow[dr,color=Mahogany]&R(1,1)\arrow[dr,color=Mahogany]&&&\\
+T(4)=R(2,0)\arrow[r]\arrow[dr,color=Mahogany]&R(2,1)\arrow[r]\arrow[dr,color=Mahogany]&R(2,2)\arrow[dr,color=Mahogany]&&\\
+T(8)=R(3,0)\arrow[r]\arrow[dr,color=Mahogany]&R(3,1)\arrow[r]\arrow[dr,color=Mahogany]&R(3,2)\arrow[r]\arrow[dr,color=Mahogany]&R(3,3)\arrow[dr,color=Mahogany]\\
+\vdots&\vdots&\vdots&\vdots&\ddots\\
+\endtikzcd
+    \caption{Romberg method visualized}
+    \label{fig:RombDiag}
+\end{figure}
 \subsection*{d)}
+We can see from the graphs in figure \ref{fig:graph2} that the function \(f(x)=\cos(2\pi x)\) over \([0,1]\) converges rapidly and thus the graph abruptly ends after about two steps. From the same figure, one can observe from the other graph that the error seem to increase and then stabilize at around \(7.5\cdot 10^{-1}\). This apparently suggests that there is a problem with the code, since as we earlier mentioned, we have \(\mathcal{O}(2^{n^{2k+2}})\). What we need to keep in mind is that this accuracy demands that the function is \(2k+2\) times differentiable over the interval\footnote{This follows from Euler-Maclaurin Expansion}. It is also easy to observe that this is violated already by the first differentiation, since \(f'(x)=\frac{1}{3}x^{-\frac{2}{3}}\) is not defined for \(x=0\).
+
+In table \ref{tab:simpsRomb} We can see that where the Romberg method fails to deliver a sufficiently good approximation to \(f(x)=x^{\frac{1}{3}}\), the adaptive Simpson method steps up and deliver.
 \restoregeometry
+\begin{table}[h]
+\centering
+\begin{tabular}{p{2cm}p{2.5cm}ll}
+
+\rowcolor{XKCDpale}$\textbf{f(x)}$                     & \textbf{Exact}               & \textbf{Adaptive Simpson} & \textbf{Romberg} \\ \rowcolor{tableBack}
+$cos(2 \pi x)$, \newline$x \in [0, 1]$      & 0                            & 0          & 0       \\ \rowcolor{tableBack}
+$x^{1/3}$, \newline$x \in [0, 1]$ & $0.75$& $0.75$          & $0.7498154$       \\ 
+\end{tabular}
+\caption{Values from the Simpson and Romberg method ran on the respective functions ($f(x)$), with tolerance $1\cdot10^{-7}$, and rounded up after the 7 decimal.}
+\label{tab:simpsRomb}
+\end{table}
+\section*{Problem 2}
+\subsection*{a)}
+We used another integration method called mid-point Runge-Kutta to solve the free rigid body Euler equation. The Euler's equations are vectorial quasilinear first-order ordinary differential equation. The Euler equation is given by: 
+\[\stackrel{\bullet}{\vec{m}} =\vec{m}\times({T^{-1}}\vec{m})=f(t,\vec{m}),\qquad \vec{m}(0)=\vec{m}_0\]
+Where T is the diagonal inertia tensor. 
+
+The mid-point Runge-Kutta method is a method for solving differential equations. The method is given by: 
+\[Y_{n+1} = Y_n +  hK_1, \qquad K_1=f(t_n + \frac{h}{2}, y_n+\frac{h}{2}K_1)\]
+In implementing this method we needed to solve a nonlinear system of equations. In our case we implemented the Newton method. 
+
+
+\subsection*{b)}
+We are also asked to implement the improved Euler method, but due to some confusion regarding the given formula, we decided to implement both the improved Euler method given by
+\[y_{n+1} = y_n + \frac{1}{2}h[f(x_n,y_n) + f(x_n + h, y_n + hf(x_n, y_n))]\]
+and the modified Euler method given by
+\[y_{n+1} = y_n + hf\left(x_n + \frac{1}{2}h, y_n + \frac{1}{2}hf(x_n, y_n)\right)\]
+where $h$ is the step size. 
+
+\subsection*{c)}
+\lstset{language=Python}
+NumPy containes different solving methods. We used one called \lstinline{solve_ivp()}, which is function that solves an initial value problem for a system of ODEs. We used this function to check how accurate solutions our methods gave. 
+We compared the different sulotions given by different step sizes to see how that affected how accurate our solutions where. 
+
+\subsection*{d)}
+
+\subsection*{e)}
+Lastly we were to plot the different solutions obtained by the different rigid body integrators as plots on the ''sphere given by $\gamma = \vec{m}(t)^T \vec{m}(t)$''. Our hesitation with this task is that $\gamma$ was a number and not necessarily a sphere. We therefore made the interpretation that the sphere would be the sphere of a ball with radius=$\gamma$.
+
 \end{document}
