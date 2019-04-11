@@ -18,12 +18,7 @@
     \rhead{Project 3}
     \lhead{MA2501}
     \rfoot{Page \thepage \ of \pageref{LastPage}}
-\fancypagestyle{plain}{
-    \fancyhf{}
-    \rhead{Project 3}
-    \lhead{MA2501}
-    \fancyfoot{}
-}
+
 \fancypagestyle{noheader}{
   \fancyhf{}% Clear header/footer
   \renewcommand{\headrulewidth}{0pt}% No header rule
@@ -270,31 +265,75 @@ $x^{1/3}$, \newline$x \in [0, 1]$ & $0.75$& $0.75$          & $0.7498154$       
 \label{tab:simpsRomb}
 \end{table}
 \section*{Problem 2}
+Problem 2 regards the motion of a free rigid body with mass centre at the origin. This is described by the Euler equations
+\[\left\{\begin{array}{l}
+    \dot{ \vec{m}}(t)=\vec{f}(t,\vec{m}(t))=\vec{m}(t)\times({T^{-1}}\vec{m}(t))   \\
+    \vec{m}(0)=\vec{m}_0  
+\end{array}\right.\]
+where \(T=diag(I_1,I_2,I_3)\), and \(\vec{m}=(y_1,y_2,y_3)^T\) represents the angular momentum of the body. It is to be assumed that \(I_1<I_2<I_3\). A consequence of the physical nature of the problem is that all solutions \(\vec{m}(t)\) to the equations must satisfy 
+\[\gamma=\vec{m}(t)^T\vec{m}(t)=const\qquad E=\frac{1}{2}\vec{m}(t)^T(T^{-1}\vec{m}(t))=const\]
+where \(\gamma\) is the norm of \(\vec{m}(t)\) and \(E\) is the kinetic energy of the body. Thus all solutions has to lie on the intersection of the sphere about the origin given by radius \(\gamma\), and the ellipsoid given by \(E=const\). 
 \subsection*{a)}
-We used another integration method called mid-point Runge-Kutta to solve the free rigid body Euler equation. The Euler's equations are vectorial quasilinear first-order ordinary differential equation. The Euler equation is given by: 
-\[\stackrel{\bullet}{\vec{m}} =\vec{m}\times({T^{-1}}\vec{m})=f(t,\vec{m}),\qquad \vec{m}(0)=\vec{m}_0\]
-Where T is the diagonal inertia tensor. 
+We implemented the ODE-solving routine Runge-Kutta midpoint method, given by formulas
 
-The mid-point Runge-Kutta method is a method for solving differential equations. The method is given by: 
-\[Y_{n+1} = Y_n +  hK_1, \qquad K_1=f(t_n + \frac{h}{2}, y_n+\frac{h}{2}K_1)\]
-In implementing this method we needed to solve a nonlinear system of equations. In our case we implemented the Newton method. 
-
+\[Y_{n+1} = Y_n +  hK_1, \qquad K_1=f(t_n + \frac{h}{2}, y_n+\frac{h}{2}K_1).\]
+where \(h\) is the step size. This is clearly an implicit method, and by such gives a system of nonlinear equations to be solved for each iteration. To handle this, we use the Newton method. We opted to implement this in such a way that the user has to give the Jacobian of \(\vec{f}(t,\vec{m}(t))\) for it to run. The newton method solves the system
+\[F(t,K)=K-f(t+\frac{h}{2},y+\frac{h}{2}K)\]
+which uses the initial guess \(K=\vec{0}\), and jacobian \(J_F=I-J_f(t+\frac{h}{2},y+\frac{h}{2}K)\)
 
 \subsection*{b)}
-We are also asked to implement the improved Euler method, but due to some confusion regarding the given formula, we decided to implement both the improved Euler method given by
-\[y_{n+1} = y_n + \frac{1}{2}h[f(x_n,y_n) + f(x_n + h, y_n + hf(x_n, y_n))]\]
-and the modified Euler method given by
+The task further asks us to implement the improved Euler method, but gave at the time of implementation the formula for modified Euler method\footnote{As far as we could see, at least.}. Thus both these methods are implemented in the code, but only one of them is used to solve the system of equations later on.
+The formula for modified Euler is,
 \[y_{n+1} = y_n + hf\left(x_n + \frac{1}{2}h, y_n + \frac{1}{2}hf(x_n, y_n)\right)\]
-where $h$ is the step size. 
+and the formula for the improved Euler is
+\[y_{n+1} = y_n + \frac{1}{2}h[f(x_n,y_n) + f(x_n + h, y_n + hf(x_n, y_n))]\]
+where $h$ is the step size in both formulas. 
 
 \subsection*{c)}
 \lstset{language=Python}
-NumPy containes different solving methods. We used one called \lstinline{solve_ivp()}, which is function that solves an initial value problem for a system of ODEs. We used this function to check how accurate solutions our methods gave. 
-We compared the different sulotions given by different step sizes to see how that affected how accurate our solutions where. 
+To get a good reference to compare the solution of the free rigid body equations from the Implicit Euler and Midpoint Runge-Kutta to, we used a function from the Python libarary \lstinline{scipy} called \lstinline{scipy.integration.solve_ivp()}. We ran the methods multiple times over the time interval \([0,1]\), with a decreasing step-size, and we expected to observe that the difference (our error-estimate) between the solutions and the reference should decrease with an order of 2. As can be observed in figure \ref{fig:gr2c}, this seems to not be the case. If it had been of order 2, the error should be aligned along lines parallell to the dashed lines in a graph with log-axis. 
 
+After a lot of tinkering with the code without getting any better results, we decided to let it stand as it is. A guess for why we get this result is that there are some problems with the end-time of the reference and the methods, since the errors for both methods seem to align pretty well with each other.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Graph2c.png}
+    \caption{The estimated error for each of the methods over time interval \([0,1]\)}
+    \label{fig:gr2c}
+\end{figure}
+
+\newgeometry{margin=10mm,tmargin=20mm}
+\thispagestyle{plain}
+\begin{tikzpicture}[remember picture,overlay]
+    \fill[color=XKCDpale] (current page.south west) rectangle (current page.north east);
+\end{tikzpicture}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{Graphs2d.png}
+    \caption{The errors in energy and position for increasing time by each method for step size \(1\cdot10^{-1}\) and \(1\cdot10^{-2}\).}
+    \label{fig:gr2d}
+\end{figure}
+\restoregeometry
 \subsection*{d)}
-
 \subsection*{e)}
 Lastly we were to plot the different solutions obtained by the different rigid body integrators as plots on the ''sphere given by $\gamma = \vec{m}(t)^T \vec{m}(t)$''. Our hesitation with this task is that $\gamma$ was a number and not necessarily a sphere. We therefore made the interpretation that the sphere would be the sphere of a ball with radius=$\gamma$.
-
+\newgeometry{margin=10mm}
+\pagestyle{plain}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{SphRKMid.png}
+    \caption{The solutions by Runge Kutta Midpoint.}
+    \label{fig:SphRKMid}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{SphIMPEul.png}
+    \caption{The solutions by Implicit Euler.}
+    \label{fig:SphImpEul}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{SphBTin.png}
+    \caption{The solutions by built in method.}
+    \label{fig:SphBTin}
+\end{figure}
 \end{document}
