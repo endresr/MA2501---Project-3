@@ -72,7 +72,7 @@ print("Done with Mid1 - Eul2")
 tlist1=np.linspace(t0,tend,int((tend-t0)/h1))
 tlist2=np.linspace(t0,tend,int((tend-t0)/h2))
 Ref1=spi.solve_ivp(funk,(t0,t0),m0.reshape(1,3)[0]).y[:,-1].reshape((3,1))
-for t in tlist1:
+for t in tlist1[1:]:
     Ref1=np.append(Ref1,spi.solve_ivp(funk,
                                     (t0,t),
                                     m0.reshape(1,3)[0]).y[:,-1].reshape((3,1)),axis=1)
@@ -81,7 +81,7 @@ for t in tlist1:
 print("Done with Ref1")
 
 Ref2=spi.solve_ivp(funk,(t0,t0),m0.reshape(1,3)[0]).y[:,-1].reshape((3,1))
-for t in tlist2:
+for t in tlist2[1:]:
     Ref2=np.append(Ref2,spi.solve_ivp(funk,
                                     (t0,t),
                                     m0.reshape(1,3)[0]).y[:,-1].reshape((3,1)),axis=1)

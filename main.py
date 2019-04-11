@@ -32,8 +32,8 @@ FSim = np.asarray([IntM.adaptiveSimpson(f, (0, 1), i) for i in TolRangea])
 GSim = np.asarray([IntM.adaptiveSimpson(g, (0, np.pi / 4), i) for i in TolRangea])
 gint = (1 / 13) * (2 + 3 * np.exp((3 * np.pi) / 4))  # Value of definite integral of g
 
-# Plot
 
+#Table of values
 print('-' * 60)
 print("{:.^60}".format("Definite integral"))
 print('-' * 60)
@@ -44,7 +44,7 @@ print("{:<20}{:>20}{:>20}".format("Adaptive Simpson", str(round(FaS, 14)),
                                   str(round(GaS, 14))))
 print("{:<20}{:>20}{:>20}".format("Error", str(np.absolute(round(FaS - 0, 14))),
                                   str(round(np.absolute(GaS - gint), 14))))
-
+# Plot
 fig = plt.figure(1, figsize=(16, 9), dpi=100, facecolor='xkcd:pale',
                  edgecolor='none')
 ax = fig.add_subplot(111)
@@ -77,17 +77,18 @@ Fr = IntM.rombergIntegration(f, (0, 1), 10, 1e-7)
 HaS = IntM.adaptiveSimpson(h, (0, 1), 1e-7)
 Hr = IntM.rombergIntegration(h, (0, 1), 10, 1e-7)
 
+#Table of values
 print('-' * 50)
 print("{:.^50}".format("Definite integral"))
 print('-' * 50)
 print("{:<20}{:>15}{:>15}".format(" ", "f(x)", "g(x)"))
 print("{:<20}{:>15}{:>15}".format("Exact Integral", str(0), str(3 / 4)))
-print("{:<20}{:>15}{:>15}".format("Adaptive Simpson", str(round(FaS, 6)),
-                                  str(round(HaS, 6))))
-print("{:<20}{:>15}{:>15}".format("Romberg Integration", str(round(Fr, 6)),
-                                  str(round(Hr, 6))))
+print("{:<20}{:>15}{:>15}".format("Adaptive Simpson", str(round(FaS, 7)),
+                                  str(round(HaS, 7))))
+print("{:<20}{:>15}{:>15}".format("Romberg Integration", str(round(Fr, 7)),
+                                  str(round(Hr, 7))))
 
-# Convergence
+# Convergence plot
 
 IterN = 20  # Max iterations for convergence test
 Converg1 = IntM.rombergIntegration(f, (0, 1), IterN, 1e-10, Matr=True)
@@ -192,42 +193,85 @@ oppg2d[6][1]=Array of the error in energy for positions from built-in method
 #2c
 fig,(ax1,ax2)=plt.subplots(2,1,
     sharex=True,
-    figsize=(6.4,6.4),
-    facecolor='xkcd:pale')
+    figsize=(6.4,6.4))
 fig.suptitle("Errors of the methods for decreasing step size")
 ax1.set_title("RK midpoint")
-ax1.loglog(oppg2c[0],oppg2c[1],'x',color="xkcd:crimson")
-ax1.loglog(oppg2c[0],[x**2 for x in oppg2c[0]],'k--')
+ax1.loglog(oppg2c[0],oppg2c[1],
+           'x',color="xkcd:crimson",
+           label=r"Error")
+ax1.loglog(oppg2c[0],[x**2 for x in oppg2c[0]],
+           'k--', label=r"$h^2$")
+ax1.legend(loc=4)
 ax1.set_ylabel(r"Error")
 ax2.set_title("Improved Euler")
-ax2.loglog(oppg2c[0],oppg2c[2],'x',color="xkcd:crimson")
-ax2.loglog(oppg2c[0],[x**2 for x in oppg2c[0]],'k--')
+ax2.loglog(oppg2c[0],oppg2c[2],
+           'x',color="xkcd:crimson",
+           label=r"Error")
+ax2.loglog(oppg2c[0],[x**2 for x in oppg2c[0]],
+           'k--', label=r"$h^2$")
+ax2.legend(loc=4)
 ax2.set_ylabel(r"Error")
-ax2.set_xlabel("Step size")
+ax2.set_xlabel(r"Step size, $h$")
 
 plt.show()
 
 
 #2d
 
-fig,(ax1,ax2)=plt.subplots(2,1,
+fig,axes=plt.subplots(3,2,
     sharex=True,
-    figsize=(6.4,6.4),
+    figsize=(10,10),
     facecolor='xkcd:pale')
-fig.suptitle("Errors of the methods for increasing time with step size 1e-1")
-ax1.set_title("RK midpoint")
-ax1.semilogy(oppg2d[0],oppg2d[4][0],'x',
+fig.suptitle("Errors of the methods for increasing time")
+axes[0,0].set_title("RK midpoint")
+axes[0,0].semilogy(oppg2d[0],oppg2d[4][0],'x',
            color="xkcd:crimson",label=r"Error in $\gamma$")
-ax1.semilogy(oppg2d[0],oppg2d[4][1],'k--',
+axes[0,0].semilogy(oppg2d[0],oppg2d[4][1],'k--',
            label=r"Error in Energy $E$")
-ax1.set_ylabel(r"Error")
-ax2.set_title("Improved Euler")
-ax2.semilogy(oppg2d[0],oppg2d[5][0],'x',
+axes[0,0].set_ylabel(r"Error")
+axes[0,0].legend(loc=4)
+
+axes[1,0].set_title("Improved Euler")
+axes[1,0].semilogy(oppg2d[0],oppg2d[5][0],'x',
            color="xkcd:crimson",label=r"Error in $\gamma$")
-ax2.semilogy(oppg2d[0],oppg2d[5][0],'k--',
+axes[1,0].semilogy(oppg2d[0],oppg2d[5][1],'k--',
            label=r"Error in Energy $E$")
-ax2.set_ylabel(r"Error")
-ax2.set_xlabel("Time")
+axes[1,0].set_ylabel(r"Error")
+axes[1,0].legend(loc=4)
+
+axes[2,0].set_title("Built-in")
+axes[2,0].semilogy(oppg2d[0],oppg2d[6][0],'x',
+           color="xkcd:crimson",label=r"Error in $\gamma$")
+axes[2,0].semilogy(oppg2d[0],oppg2d[6][1],'k--',
+           label=r"Error in Energy $E$")
+axes[2,0].set_ylabel(r"Error")
+axes[2,0].legend(loc=4)
+axes[2,0].set_xlabel("Time")
+
+axes[0,1].set_title("RK midpoint")
+axes[0,1].semilogy(oppg2d[7],oppg2d[11][0],'x',
+           color="xkcd:crimson",label=r"Error in $\gamma$")
+axes[0,1].semilogy(oppg2d[7],oppg2d[11][1],'k--',
+           label=r"Error in Energy $E$")
+axes[0,1].set_ylabel(r"Error")
+axes[0,1].legend(loc=4)
+
+axes[1,1].set_title("Improved Euler")
+axes[1,1].semilogy(oppg2d[7],oppg2d[12][0],'x',
+           color="xkcd:crimson",label=r"Error in $\gamma$")
+axes[1,1].semilogy(oppg2d[7],oppg2d[12][1],'k--',
+           label=r"Error in Energy $E$")
+axes[1,1].set_ylabel(r"Error")
+axes[1,1].legend(loc=4)
+
+axes[2,1].set_title("Built-in")
+axes[2,1].semilogy(oppg2d[7],oppg2d[13][0],'x',
+           color="xkcd:crimson",label=r"Error in $\gamma$")
+axes[2,1].semilogy(oppg2d[7],oppg2d[13][1],'k--',
+           label=r"Error in Energy $E$")
+axes[2,1].set_ylabel(r"Error")
+axes[2,1].legend(loc=4)
+axes[2,1].set_xlabel("Time")
 
 plt.show()
 
@@ -243,7 +287,11 @@ def gamSphere(m):
     z = r * np.outer(np.ones(np.size(theta)), np.cos(phi))
     return x, y, z
 
-
+'''
+We've got both plotSphere and plotSphereDouble, where the only difference is
+    that the last one plots for two different sets of points. Thus we can see
+    the plots from two different step sizes, side by side.
+'''
 def plotSphere(x, y, z, X, Y, Z, Title="ODE-Solver"):
     fig = plt.figure(figsize=(10, 10))
     ax = fig.gca(projection='3d')
@@ -262,23 +310,54 @@ def plotSphere(x, y, z, X, Y, Z, Title="ODE-Solver"):
     plt.title(Title)
     plt.show()
 
-
+def plotSphereDouble(x,y,z,
+                     X1,Y1,Z1,X2,Y2,Z2,
+                     Title1="ODE-Solver",Title2="ODE-Solver",
+                     MTitle="Two spheres"):
+    fig = plt.figure(figsize=(20,10))
+    ax1 = fig.add_subplot(1, 2, 1, projection='3d')
+    ax2 = fig.add_subplot(1, 2, 2, projection='3d')
+    fig.suptitle(MTitle)
+    ax1.axis("off"),ax2.axis("off")
+    ax1.plot_surface(x, y, z,
+                    rstride=4,
+                    cstride=4,
+                    alpha=0.5,
+                    color='xkcd:pale',
+                    edgecolors="darkgray")
+    ax1.plot(X1, Y1, Z1, 
+            color="xkcd:crimson")
+    ax1.scatter(X1[0], Y1[0], Z1[0], 
+               'o', color="black", s=80)
+    ax1.view_init(azim=225)
+    ax1.set_title(Title1)
+    ax2.plot_surface(x, y, z,
+                    rstride=4,
+                    cstride=4,
+                    alpha=0.5,
+                    color='xkcd:pale',
+                    edgecolors="darkgray")
+    ax2.plot(X2, Y2, Z2, 
+            color="xkcd:crimson")
+    ax2.scatter(X2[0], Y2[0], Z2[0], 
+               'o', color="black", s=80)
+    ax2.view_init(azim=225)
+    ax2.set_title(Title2)
+    plt.show()
+    
 x, y, z = gamSphere(m0)
-plotSphere(x, y, z, 
+plotSphereDouble(x, y, z, 
            oppg2d[1][0, :], oppg2d[1][1, :], oppg2d[1][2, :],
-           Title="EK - Midpoint, step size: 0.1")
-plotSphere(x, y, z, 
-           oppg2d[2][0, :], oppg2d[2][1, :], oppg2d[2][2, :],
-           Title="Improved Euler, step size: 0.1")
-plotSphere(x, y, z, 
-           oppg2d[3][0, :], oppg2d[3][1, :], oppg2d[3][2, :],
-           Title="Built in method, step size: 0.1")
-plotSphere(x, y, z, 
            oppg2d[8][0, :], oppg2d[8][1, :], oppg2d[8][2, :],
-           Title="EK - Midpoint, step size: 0.01")
-plotSphere(x, y, z, 
+           Title1="Step size 0.1",Title2="Step size 0.01",
+           MTitle="Midpoint Runge Kutta")
+plotSphereDouble(x, y, z, 
+           oppg2d[2][0, :], oppg2d[2][1, :], oppg2d[2][2, :],
            oppg2d[9][0, :], oppg2d[9][1, :], oppg2d[9][2, :],
-           Title="Improved Euler, step size: 0.01")
-plotSphere(x, y, z, 
+           Title1="Step size 0.1",Title2="Step size 0.01",
+           MTitle="Improved Euler")
+plotSphereDouble(x, y, z, 
+           oppg2d[3][0, :], oppg2d[3][1, :], oppg2d[3][2, :],
            oppg2d[10][0, :], oppg2d[10][1, :], oppg2d[10][2, :],
-           Title="Built in method, step size: 0.01")
+           Title1="Step size 0.1",Title2="Step size 0.01",
+           MTitle="Built in method")
