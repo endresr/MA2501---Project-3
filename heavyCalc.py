@@ -114,8 +114,8 @@ ErrRef2=Err2d(Ref2)
 print("Done with Error oppg. 2d")
 
 savingDict={'2c':[steps,ErrMid,EulErr],
-            '2d':[tlist1,Mid1,Eul1,Ref1,ErrMid1,EulErr1,
-                  tlist2,Mid2,Eul2,Ref2,ErrMid2,EulErr2]}
+            '2d':[tlist1,Mid1,Eul1,Ref1,ErrMid1,EulErr1,ErrRef1,
+                  tlist2,Mid2,Eul2,Ref2,ErrMid2,EulErr2,ErrRef2]}
 
 h = open("heavyCalc.pkl","wb")
 pickle.dump(savingDict,h)

@@ -171,7 +171,23 @@ oppg2d=dictValues.get('2d')
 oppg2d[0:6]=is the same as oppg2d[7:] with step size 1e-1 instead of 1e-2
 oppg2d[0]=Array of timepoints from 0 to 30 with step size 1e-1
 oppg2d[1]=Array of the result from midpoint method over the interval [t0,tn] 
-    where t0 is start-time and tn corresponds to the elements of oppg2d[0]
+    where t0 is 0 and tn corresponds to the elements of oppg2d[0]
+oppg2d[2]=Array of the result from improved euler method over the interval [t0,tn] 
+    where t0 is 0 and tn corresponds to the elements of oppg2d[0]
+oppg2d[3]=Array of the result from built in method over the interval [t0,tn] 
+    where t0 is 0 and tn corresponds to the elements of oppg2d[0]
+oppg2d[4][0]=Array of the error in distance from origo for positions from 
+    midpoint method over the interval [0,tn], where tn comes from oppg2d[0]
+oppg2d[4][1]=Array of the error in energy for positions from midpoint method 
+    over the interval [0,tn], where tn comes from oppg2d[0]
+oppg2d[5][0]=Array of the error in distance from origo for positions from 
+    improved euler over the interval [0,tn], where tn comes from oppg2d[0]
+oppg2d[5][1]=Array of the error in energy for positions from improved euler 
+    over the interval [0,tn], where tn comes from oppg2d[0]
+oppg2d[6][0]=Array of the error in distance from origo for positions from 
+    built-in method over the interval [0,tn], where tn comes from oppg2d[0]
+oppg2d[6][1]=Array of the error in energy for positions from built-in method 
+    over the interval [0,tn], where tn comes from oppg2d[0]
 '''
 #2c
 fig,(ax1,ax2)=plt.subplots(2,1,
@@ -255,9 +271,14 @@ plotSphere(x, y, z,
            oppg2d[2][0, :], oppg2d[2][1, :], oppg2d[2][2, :],
            Title="Improved Euler, step size: 0.1")
 plotSphere(x, y, z, 
-           oppg2d[7][0, :], oppg2d[7][1, :], oppg2d[7][2, :],
-           Title="EK - Midpoint, step size: 0.01")
+           oppg2d[3][0, :], oppg2d[3][1, :], oppg2d[3][2, :],
+           Title="Built in method, step size: 0.1")
 plotSphere(x, y, z, 
            oppg2d[8][0, :], oppg2d[8][1, :], oppg2d[8][2, :],
+           Title="EK - Midpoint, step size: 0.01")
+plotSphere(x, y, z, 
+           oppg2d[9][0, :], oppg2d[9][1, :], oppg2d[9][2, :],
            Title="Improved Euler, step size: 0.01")
-
+plotSphere(x, y, z, 
+           oppg2d[10][0, :], oppg2d[10][1, :], oppg2d[10][2, :],
+           Title="Built in method, step size: 0.01")
