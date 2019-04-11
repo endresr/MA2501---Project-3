@@ -322,15 +322,19 @@ After a lot of tinkering with the code without getting any better results, we de
 \end{figure}
 \restoregeometry
 \subsection*{d)}
-In figure
+As both \(\gamma\) and \(E\) should be constant for \(\vec{m}(t)\) for all times, it is interesting to look at how the errors in these values changes for increasing times \(t\), as it should be a fine indication for how good of an approximation we have for \(\vec{m}(t)\). These errors are plotted in both figure \ref{fig:gr2d} and \ref{fig:gr2d2}. In the first figure the error is plotted for each method for step size \(1\cdot10^{-1}\) to the left and \(1\cdot10^{-2}\) to the right. In the last figure the errors for the Midpoint Runge-Kutta and the Built in method is plotted with lower tolerances than standard. 
+
+One can observe that before the changes in tolerances, the midpoint EK gives the best result overall, but with new tolerances, the built-in method outperforms all the others method. It is also interesting to note that the errors seem to be somewhat independent of step-size, in the sense that they fluctuate in the same manner for step size \(1\cdot10^{-1}\) and \(1\cdot10^{-2}\). In an another obvious sense, they are also different, since despite fluctuation a lower step size gives in general lower errors.
 \begin{figure}
     \centering
     \includegraphics[width=0.7\linewidth]{graph2d2.png}
-    \caption{Midpoint RK method with the tolerance \(1\cdot10^{-10}\) instead of standard \(1\cdot10^{-7}\), and built in method with relative tolerance and absolute tolerance equal to \(1\cdot10^{-10}\) and \(1\cdot10^{-12}\) respectively, instead of the standard \(1\cdot10^{-3}\) and \(1\cdot10^{-6}\). }
+    \caption{Midpoint RK method with the tolerance \(1\cdot10^{-10}\) instead of standard \(1\cdot10^{-7}\), and built in method with relative tolerance and absolute tolerance equal to \(1\cdot10^{-10}\) and \(1\cdot10^{-12}\) respectively, instead of the standard \(1\cdot10^{-3}\) and \(1\cdot10^{-6}\). Both with step size \(1\cdot10^{-1}\)}
     \label{fig:gr2d2}
 \end{figure}
 \subsection*{e)}
-Lastly we were to plot the different solutions obtained by the different rigid body integrators as plots on the ''sphere given by $\gamma = \vec{m}(t)^T \vec{m}(t)$''. Our hesitation with this task is that $\gamma$ was a number and not necessarily a sphere. We therefore made the interpretation that the sphere would be the sphere of a ball with radius=$\gamma$.
+It is interesting to see how the solutions are distributed relative to the sphere with center in origin and radius equal to \(\gamma\), so we can confirm the assertion that the solutions for the system will lie along the intersection of the sphere and an ellipsoid from the kinetic energy. There should not be a lot of uncertainty around this, since we already in subtask d) has observed that the solutions provided by the methods give that \(\gamma(0)\approx\gamma(t)\) and \(E(0)\approx E(t)\). 
+
+In the figures \ref{fig:SphRKMid}, \ref{fig:SphImpEul} and \ref{fig:SphBTin}, the sphere and the solutions given by each method are plotted. They all resemble each other, and it seems likely that the curves correspond to the intersection of the sphere and an ellipsoid. One final observation is that the curve is closed, so we seem to have used a good time interval for our observations in d) and e). 
 \newgeometry{margin=10mm}
 \pagestyle{plain}
 \begin{figure}
