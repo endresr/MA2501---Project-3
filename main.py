@@ -251,7 +251,7 @@ axes[0,1].semilogy(oppg2d[7],oppg2d[11][0],'x',
            color="xkcd:crimson",label=r"Error in $\gamma$")
 axes[0,1].semilogy(oppg2d[7],oppg2d[11][1],'k--',
            label=r"Error in Energy $E$")
-#axes[0,1].set_ylabel(r"Error")
+axes[0,1].set_ylabel(r"Error")
 axes[0,1].legend(loc=4)
 
 axes[1,1].set_title("Improved Euler")
@@ -259,7 +259,7 @@ axes[1,1].semilogy(oppg2d[7],oppg2d[12][0],'x',
            color="xkcd:crimson",label=r"Error in $\gamma$")
 axes[1,1].semilogy(oppg2d[7],oppg2d[12][1],'k--',
            label=r"Error in Energy $E$")
-#axes[1,1].set_ylabel(r"Error")
+axes[1,1].set_ylabel(r"Error")
 axes[1,1].legend(loc=4)
 
 axes[2,1].set_title("Built-in")
@@ -267,7 +267,7 @@ axes[2,1].semilogy(oppg2d[7],oppg2d[13][0],'x',
            color="xkcd:crimson",label=r"Error in $\gamma$")
 axes[2,1].semilogy(oppg2d[7],oppg2d[13][1],'k--',
            label=r"Error in Energy $E$")
-#axes[2,1].set_ylabel(r"Error")
+axes[2,1].set_ylabel(r"Error")
 axes[2,1].legend(loc=4)
 axes[2,1].set_xlabel("Time")
 
