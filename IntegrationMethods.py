@@ -145,7 +145,7 @@ def Newt(func, Jac, x0, t, NIter=100, TOL=1e-7):
     return x2
 
 
-def impMidRungKut(Interval, InitVal, F, Step, Jac):
+def impMidRungKut(Interval, InitVal, F, Step, Jac,Tol=1e-7):
     """
     This is the code for the implicit Midpoint Runge-Kutta method.
     Note that this is hardcoded for three variables, and uses Newton method
@@ -159,6 +159,7 @@ def impMidRungKut(Interval, InitVal, F, Step, Jac):
         Step: Step-size of the method
         Jac: One has to provide the jacobian for the expression of the 
             derivative
+        Tol: The tolerance which the Newton method uses
     Output:
         Array of function values at time t0+i*Step at column i with shape 
             (3,(b-a)/Step)
@@ -170,7 +171,7 @@ def impMidRungKut(Interval, InitVal, F, Step, Jac):
         y = yn[:, -1].copy().reshape(3, 1)
         JacK = lambda t, K: np.diag((1, 1, 1)) - Jac(t + Step / 2, y + Step / 2 * K)
         Fu = lambda t, K: K - F(t + Step / 2, y + Step / 2 * K)
-        K1 = Newt(Fu, JacK, np.zeros((3, 1)), t)
+        K1 = Newt(Fu, JacK, np.zeros((3, 1)), t, TOL=Tol)
         yn = np.append(yn, y + Step * K1, axis=1)
     return yn
 

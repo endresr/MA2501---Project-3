@@ -88,6 +88,19 @@ for t in tlist2[1:]:
     
 print("Done with Ref2")
 
+Ref3=spi.solve_ivp(funk,
+                   (t0,t0),
+                   m0.reshape(1,3)[0],
+                   rtol=1e-10,atol=1e-12).y[:,-1].reshape((3,1))
+for t in tlist1[1:]:
+    Ref3=np.append(Ref3,spi.solve_ivp(funk,
+                                    (t0,t),
+                                    m0.reshape(1,3)[0],
+                                    rtol=1e-10,atol=1e-12).y[:,-1].reshape((3,1)),axis=1)
+Mid3=IntM.impMidRungKut((t0,tend),m0,funk,h1,Jac,Tol=1e-10)
+
+print("Done with Ref3 and Mid3")
+
 def gam(m):
     return np.linalg.norm(m)
 def KinErg(m):
@@ -106,16 +119,19 @@ def Err2d(List):
 
 ErrMid1=Err2d(Mid1)
 ErrMid2=Err2d(Mid2)
+ErrMid3=Err2d(Mid3)
 EulErr1=Err2d(Eul1)
 EulErr2=Err2d(Eul2)
 ErrRef1=Err2d(Ref1)
 ErrRef2=Err2d(Ref2)
+ErrRef3=Err2d(Ref3)
 
 print("Done with Error oppg. 2d")
 
 savingDict={'2c':[steps,ErrMid,EulErr],
             '2d':[tlist1,Mid1,Eul1,Ref1,ErrMid1,EulErr1,ErrRef1,
-                  tlist2,Mid2,Eul2,Ref2,ErrMid2,EulErr2,ErrRef2]}
+                  tlist2,Mid2,Eul2,Ref2,ErrMid2,EulErr2,ErrRef2,
+                  ErrMid3,ErrRef3]}
 
 h = open("heavyCalc.pkl","wb")
 pickle.dump(savingDict,h)
