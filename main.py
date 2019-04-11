@@ -35,6 +35,7 @@ gint = (1 / 13) * (2 + 3 * np.exp((3 * np.pi) / 4))  # Value of definite integra
 
 
 #Table of values
+
 print('-' * 60)
 print("{:.^60}".format("Definite integral"))
 print('-' * 60)
@@ -47,6 +48,7 @@ print("{:<20}{:>20}{:>20}".format("Error", str(np.absolute(round(FaS - 0, 14))),
                                   str(round(np.absolute(GaS - gint), 14))))
 
 # Plot
+
 fig = plt.figure(1, figsize=(16, 9), facecolor='xkcd:pale',
                  edgecolor='none')
 ax = fig.add_subplot(111)
@@ -80,6 +82,7 @@ HaS = IntM.adaptiveSimpson(h, (0, 1), 1e-7)
 Hr = IntM.rombergIntegration(h, (0, 1), 10, 1e-7)
 
 #Table of values
+
 print('-' * 50)
 print("{:.^50}".format("Definite integral"))
 print('-' * 50)
@@ -148,7 +151,7 @@ def funk(t, m):
     return np.cross(m, Tinv @ m, axis=0)
 
 
-def Jac(t, m):
+def Jac(t, m): #The Jacobian for the system
     x1, x2, x3 = m[0, 0], m[1, 0], m[2, 0]
     l1, l2, l3 = L
     J = np.array([[0, x3 * (1 / l3 - 1 / l2), x2 * (1 / l3 - 1 / l2)],
@@ -198,6 +201,7 @@ oppg2d[15][0]+oppg2d[15][1] is the same as oppg2d[5][0]+oppg2d[5][1] only with
     different relative and absolute tolerance
 '''
 #2c
+
 fig=plt.figure(figsize=(16,4),facecolor="xkcd:pale",dpi=300)
 plt.title("Errors of the methods for decreasing step size")
 plt.loglog(oppg2c[0],oppg2c[2],
