@@ -46,7 +46,7 @@ print("{:<20}{:>20}{:>20}".format("Error", str(np.absolute(round(FaS - 0, 14))),
                                   str(round(np.absolute(GaS - gint), 14))))
 
 # Plot
-fig = plt.figure(1, figsize=(16, 9), dpi=100, facecolor='xkcd:pale',
+fig = plt.figure(1, figsize=(16, 9), facecolor='xkcd:pale',
                  edgecolor='none')
 ax = fig.add_subplot(111)
 ax.set_facecolor('xkcd:pale grey')
