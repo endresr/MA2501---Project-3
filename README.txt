@@ -16,7 +16,7 @@ it is done manually because of laziness.
 
 
 
-The project report is found in report.tex or MA2501__Project_3.pdf
+The project report is found in MA2501__Project_3.pdf
 
 
 
